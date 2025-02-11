@@ -146,7 +146,8 @@ export function ImageCard({
     imageCardDragHandler,
     imageFileDragHandler,
     isPinturaEnabled,
-    openImageEditor
+    openImageEditor,
+    floatDirection
 }) {
     const figureRef = React.useRef(null);
 
@@ -240,5 +241,6 @@ ImageCard.propTypes = {
     imageFileDragHandler: PropTypes.object,
     imageCardDragHandler: PropTypes.object,
     isPinturaEnabled: PropTypes.bool,
-    openImageEditor: PropTypes.func
+    openImageEditor: PropTypes.func,
+    floatDirection: PropTypes.string //added float
 };

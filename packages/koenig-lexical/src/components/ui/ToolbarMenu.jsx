@@ -5,8 +5,11 @@ import EyeIcon from '../../assets/icons/kg-eye.svg?react';
 import HeadingThreeIcon from '../../assets/icons/kg-heading-3.svg?react';
 import HeadingTwoIcon from '../../assets/icons/kg-heading-2.svg?react';
 import ImgFullIcon from '../../assets/icons/kg-img-full.svg?react';
+import ImgJustifyIcon from '../../assets/icons/kg-img-justify.svg?react';
+import ImgLeftIcon from '../../assets/icons/kg-img-left.svg?react';
 import ImgRegularIcon from '../../assets/icons/kg-img-regular.svg?react';
 import ImgReplaceIcon from '../../assets/icons/kg-replace.svg?react';
+import ImgRightIcon from '../../assets/icons/kg-img-right.svg?react';
 import ImgWideIcon from '../../assets/icons/kg-img-wide.svg?react';
 import ItalicIcon from '../../assets/icons/kg-italic.svg?react';
 import LinkIcon from '../../assets/icons/kg-link.svg?react';
@@ -31,6 +34,9 @@ export const TOOLBAR_ICONS = {
     imgWide: ImgWideIcon,
     imgFull: ImgFullIcon,
     imgReplace: ImgReplaceIcon,
+    imgLeft: ImgLeftIcon,
+    imgRight: ImgRightIcon,
+    imgJustify: ImgJustifyIcon,
     add: AddIcon,
     edit: EditIcon,
     wand: WandIcon,

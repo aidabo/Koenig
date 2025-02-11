@@ -8,12 +8,13 @@ import {mergeRegister} from '@lexical/utils';
 import {useKoenigSelectedCardContext} from '../context/KoenigSelectedCardContext';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 
-const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, children}) => {
+const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, children, float}) => {
     const {cardConfig} = React.useContext(KoenigComposerContext);
     const [editor] = useLexicalComposerContext();
     const [cardType, setCardType] = React.useState(null);
     const [captionHasFocus, setCaptionHasFocus] = React.useState(null);
     const [cardWidth, setCardWidth] = React.useState(width || 'regular');
+    const [floatDirection, setFloatDirection] = React.useState(float || 'none');
     const containerRef = React.useRef(null);
     const skipClick = React.useRef(false);
 
@@ -159,6 +160,8 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
             isEditing,
             cardWidth,
             setCardWidth,
+            floatDirection,
+            setFloatDirection,
             setCaptionHasFocus,
             setEditing,
             nodeKey,
@@ -169,6 +172,7 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 cardType={cardType}
                 cardWidth={width}
                 feature={cardConfig?.feature}
+                floatDirection={float}
                 IndicatorIcon={IndicatorIcon}
                 isDragging={isDragging}
                 isEditing={isEditing}
@@ -176,6 +180,7 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 isVisibilityActive={isVisibilityActive}
                 wrapperStyle={wrapperStyle}
                 onIndicatorClick={toggleEditMode}
+                
             >
                 {children}
             </CardWrapper>

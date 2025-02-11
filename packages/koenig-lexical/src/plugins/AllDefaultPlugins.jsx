@@ -27,6 +27,8 @@ import {ProductPlugin} from '../plugins/ProductPlugin';
 import {SignupPlugin} from '../plugins/SignupPlugin';
 import {TogglePlugin} from '../plugins/TogglePlugin';
 import {VideoPlugin} from '../plugins/VideoPlugin';
+// eslint-disable-next-line no-unused-vars
+import {FloatImagePlugin} from './FloatImagePlugin';
 
 export const AllDefaultPlugins = () => {
     return (
@@ -65,6 +67,9 @@ export const AllDefaultPlugins = () => {
             <SignupPlugin />
             <CollectionPlugin />
             <CallToActionPlugin />
+            
+            {/* Custom Plugin*/}
+            {/* <FloatImagePlugin/>             */}
         </>
     );
 };

@@ -11,28 +11,28 @@ import {OPEN_TENOR_SELECTOR_COMMAND, OPEN_UNSPLASH_SELECTOR_COMMAND} from '../pl
 import {createCommand} from 'lexical';
 import {populateNestedEditor, setupNestedEditor} from '../utils/nested-editors';
 
-export const INSERT_IMAGE_COMMAND = createCommand();
+export const INSERT_FLOAT_IMAGE_COMMAND = createCommand();
 
-export class ImageNode extends BaseImageNode {
+export class FloatImageNode extends BaseImageNode {
     // transient properties used to control node behaviour
     __triggerFileDialog = false;
     __previewSrc = null;
     __captionEditor;
     __captionEditorInitialState;
-    __floatDirection;
+    __floatDirection = 'none';
 
     static kgMenu = [{
-        label: 'Image',
-        desc: 'Upload, or embed with /image [url]',
+        label: 'Float Image',
+        desc: 'Upload, or embed with /floatimage [url]',
         Icon: ImageCardIcon,
-        insertCommand: INSERT_IMAGE_COMMAND,
+        insertCommand: INSERT_FLOAT_IMAGE_COMMAND,
         insertParams: {
             triggerFileDialog: true
         },
         matches: ['image', 'img'],
-        queryParams: ['src'],
+        queryParams: ['src', 'floatDirection'],
         priority: 1,
-        shortcut: '/image'
+        shortcut: '/floatimage'
     },
     {
         section: 'Embeds',
@@ -65,12 +65,17 @@ export class ImageNode extends BaseImageNode {
 
     static uploadType = 'image';
 
+    static getType() {
+        return 'float-image';
+    }
+
     constructor(dataset = {}, key) {
         super(dataset, key);
 
         const {previewSrc, triggerFileDialog, initialFile, selector, isImageHidden, floatDirection} = dataset;
 
-        this.__floatDirection = floatDirection || 'none';
+        //Floating layout
+        this.__floatDirection = floatDirection || 'left';
 
         this.__previewSrc = previewSrc || '';
         // don't trigger the file dialog when rendering if we've already been given a url
@@ -97,9 +102,11 @@ export class ImageNode extends BaseImageNode {
     getDataset() {
         const dataset = super.getDataset();
 
+        //added custom style
+        dataset.__floatDirection = this.__floatDirection;
+
         dataset.__previewSrc = this.__previewSrc;
         dataset.__triggerFileDialog = this.__triggerFileDialog;
-        dataset.__floatDirection = this.__floatDirection;
 
         // client-side only data properties such as nested editors
         const self = this.getLatest();
@@ -134,25 +141,24 @@ export class ImageNode extends BaseImageNode {
         writable.__floatDirection = float;
     }
 
-    static getType() {
-        return 'image';
-    }    
+    // static importJSON(serializedNode) {
+    //   return new FloatImageNode(
+    //     serializedNode.src,
+    //     serializedNode.floatDirection
+    //   );
+    // }
 
     createDOM() {
-        return document.createElement('div');
-    }
-    
-    updateDOM(prevNode) {
-        if (prevNode.__floatDirection !== this.__floatDirection) {
-            //const element = this.getDOM();
-            //element.className = `kg-float-image kg-float-${this.__floatDirection}`;
-            return true;
-        }
-        return false;
+        const div = document.createElement('div');
+        //div.className = `kg-float-image kg-float-${this.__floatDirection}`;
+        return div;
     }
 
     exportJSON() {
         const json = super.exportJSON();
+
+        //added
+        json.type = 'float-image';
         json.floatDirection = this.__floatDirection;
 
         // convert nested editor instances back into HTML because their content may not
@@ -168,14 +174,23 @@ export class ImageNode extends BaseImageNode {
         return json;
     }
 
+    updateDOM(prevNode) {
+        if (prevNode.__floatDirection !== this.__floatDirection) {
+            //const element = this.getDOM();
+            //element.className = `kg-float-image kg-float-${this.__floatDirection}`;
+            return true;
+        }
+        return false;
+    }
+
     decorate() {
         const Selector = this.__selector;
 
         return (
             <div className={`kg-float-image kg-float-${this.__floatDirection}`}>
+
                 <KoenigCardWrapper nodeKey={this.getKey()} width={this.__cardWidth}>
                     {this.__selector && <Selector nodeKey={this.getKey()} />}
-
                     {
                         !this.__isImageHidden && (
                             <ImageNodeComponent
@@ -192,15 +207,17 @@ export class ImageNode extends BaseImageNode {
                         )
                     }
                 </KoenigCardWrapper>
+        
             </div>
+
         );
     }
 }
 
-export const $createImageNode = (dataset) => {
-    return new ImageNode(dataset);
-};
+export function $createFloatImageNode(src, floatDirection) {
+    return new FloatImageNode(src, floatDirection);
+}
 
-export function $isImageNode(node) {
-    return node instanceof ImageNode;
+export function $isFloatImageNode(node) {
+    return node instanceof FloatImageNode;
 }

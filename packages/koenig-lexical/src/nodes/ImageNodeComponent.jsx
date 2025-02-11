@@ -24,7 +24,7 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
     const [editor] = useLexicalComposerContext();
     const [showLink, setShowLink] = React.useState(false);
     const {fileUploader, cardConfig} = React.useContext(KoenigComposerContext);
-    const {isSelected, cardWidth, setCardWidth} = React.useContext(CardContext);
+    const {isSelected, cardWidth, setCardWidth, floatDirection, setFloatDirection} = React.useContext(CardContext);
     const fileInputRef = React.useRef();
     const toolbarFileInputRef = React.useRef();
     const [showSnippetToolbar, setShowSnippetToolbar] = React.useState(false);
@@ -186,6 +186,14 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
         });
     };
 
+    const handleImageCardFloating = (newFloatDirection) => {
+        editor.update(() => {
+            const node = $getNodeByKey(nodeKey);
+            node.floatDirection = newFloatDirection; // this is a property on the node, not the card
+            setFloatDirection(newFloatDirection); // sets the state of the toolbar component
+        });
+    };
+
     const cancelLinkAndReselect = () => {
         setShowLink(false);
         reselectImageCard();
@@ -211,6 +219,7 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
                 captionEditorInitialState={captionEditorInitialState}
                 cardWidth={cardWidth}
                 fileInputRef={fileInputRef}
+                floatDirection={floatDirection}
                 imageCardDragHandler={imageCardDragHandler}
                 imageFileDragHandler={imageFileDragHandler}
                 imageUploader={imageUploader}
@@ -276,9 +285,35 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
                         onClick={() => handleImageCardResize('full')}
                     />
                     <ToolbarMenuSeparator hide={isGif(src)} />
-                    <ToolbarMenuItem icon="link" isActive={href || false} label="Link" onClick = {() => {
+                    <ToolbarMenuItem icon="link" isActive={href || false} label="Link" onClick={() => {
                         setShowLink(true);
                     }} />
+
+                    {/*  floating alignment */}
+                    <ToolbarMenuSeparator hide={isGif(src)} />
+                    <ToolbarMenuItem
+                        hide={isGif(src)}
+                        icon="imgLeft"
+                        isActive={floatDirection === 'left'}
+                        label="Floating left"
+                        onClick={() => handleImageCardFloating('left')}
+                    />
+                    <ToolbarMenuItem
+                        hide={isGif(src)}
+                        icon="imgRight"
+                        isActive={floatDirection === 'right'}
+                        label="Floating right"
+                        onClick={() => handleImageCardFloating('right')}
+                    />
+                    <ToolbarMenuItem
+                        hide={isGif(src)}
+                        icon="imgJustify"
+                        isActive={floatDirection === 'none'}
+                        label="Floating none"
+                        onClick={() => handleImageCardFloating('none')}
+                    />
+                    {/*  floating alignment end*/}
+
                     <ToolbarMenuSeparator hide={!cardConfig.createSnippet} />
                     <ToolbarMenuItem
                         dataTestId="create-snippet"

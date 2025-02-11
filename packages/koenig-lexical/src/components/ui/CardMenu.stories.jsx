@@ -56,6 +56,7 @@ Default.args = {
     menu: new Map([
         ['Primary', [
             {label: 'Image', desc: 'Upload, or embed with /image [url]', Icon: ImageCardIcon},
+            //{label: 'Float Image', desc: 'Upload, or embed with /image [url]', Icon: ImageCardIcon}, //just test
             {label: 'Markdown', desc: 'Insert a Markdown editor card', Icon: MarkdownCardIcon},
             {label: 'HTML', desc: 'Insert a raw HTML card', Icon: HtmlCardIcon},
             {label: 'Gallery', desc: 'Create an image gallery', Icon: GalleryCardIcon},

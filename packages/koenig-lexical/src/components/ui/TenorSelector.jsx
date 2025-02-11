@@ -199,6 +199,7 @@ const TenorSelector = ({onGifInsert, onClickOutside, updateSearch, columns, isLo
         moveToNextHorizontalGif('left');
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     function handleGifHighlight(event) {
         switch (event.key) {
         case 'Tab':

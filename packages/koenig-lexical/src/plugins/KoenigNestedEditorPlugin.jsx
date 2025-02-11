@@ -121,6 +121,7 @@ function KoenigNestedEditorPlugin({
                 COMMAND_PRIORITY_LOW
             )
         );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editor, autoFocus, focusNext, selectedCardKey, hasSettingsPanel]);
 
     return null;

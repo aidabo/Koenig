@@ -23,7 +23,7 @@ import { EmailCtaNode } from "./EmailCtaNode";
 import { EmailNode } from "./EmailNode";
 import { EmbedNode } from "./EmbedNode";
 import { FileNode } from "./FileNode";
-import { FloatImageNode } from "./FloatImageNode";
+//import {FloatImageNode} from './FloatImageNode';
 import { GalleryNode } from "./GalleryNode";
 import { HeaderNode } from "./HeaderNode";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
@@ -78,7 +78,7 @@ const DEFAULT_NODES = [
     AtLinkNode,
     AtLinkSearchNode,
     ZWNJNode,
-    FloatImageNode,
+    //FloatImageNode
 ];
 
 export default DEFAULT_NODES;

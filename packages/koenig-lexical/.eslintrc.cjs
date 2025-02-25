@@ -2,74 +2,74 @@
 module.exports = {
     root: true,
     extends: [
-        "react-app",
-        "plugin:ghost/browser",
-        "plugin:react/recommended",
-        "plugin:storybook/recommended",
+        'react-app',
+        'plugin:ghost/browser',
+        'plugin:react/recommended',
+        'plugin:storybook/recommended'
     ],
-    plugins: ["ghost", "tailwindcss"],
+    plugins: ['ghost', 'tailwindcss'],
     rules: {
         // sort multiple import lines into alphabetical groups
-        "ghost/sort-imports-es6-autofix/sort-imports-es6": [
-            "error",
+        'ghost/sort-imports-es6-autofix/sort-imports-es6': [
+            'error',
             {
-                memberSyntaxSortOrder: ["none", "all", "single", "multiple"],
-            },
+                memberSyntaxSortOrder: ['none', 'all', 'single', 'multiple']
+            }
         ],
         // suppress errors for missing 'import React' in JSX files, as we don't need it
-        "react/react-in-jsx-scope": "off",
+        'react/react-in-jsx-scope': 'off',
         // ignore prop-types for now
-        "react/prop-types": "off",
+        'react/prop-types': 'off',
         // custom react rules
-        "react/jsx-sort-props": [
-            "error",
+        'react/jsx-sort-props': [
+            'error',
             {
                 reservedFirst: true,
                 callbacksLast: true,
                 shorthandLast: true,
-                locale: "en",
-            },
+                locale: 'en'
+            }
         ],
-        "react/button-has-type": "error",
-        "react/no-array-index-key": "error",
+        'react/button-has-type': 'error',
+        'react/no-array-index-key': 'error',
         // 'tailwindcss/classnames-order': ['error', {
         //     config: 'tailwind.config.cjs'
         // }],
-        "tailwindcss/enforces-negative-arbitrary-values": [
-            "warn",
+        'tailwindcss/enforces-negative-arbitrary-values': [
+            'warn',
             {
-                config: "tailwind.config.cjs",
-            },
+                config: 'tailwind.config.cjs'
+            }
         ],
-        "tailwindcss/enforces-shorthand": [
-            "warn",
+        'tailwindcss/enforces-shorthand': [
+            'warn',
             {
-                config: "tailwind.config.cjs",
-            },
+                config: 'tailwind.config.cjs'
+            }
         ],
-        "tailwindcss/migration-from-tailwind-2": [
-            "warn",
+        'tailwindcss/migration-from-tailwind-2': [
+            'warn',
             {
-                config: "tailwind.config.cjs",
-            },
+                config: 'tailwind.config.cjs'
+            }
         ],
-        "tailwindcss/no-arbitrary-value": "off",
-        "tailwindcss/no-custom -classname": "off",
-        "tailwindcss/no-contradicting-classname": [
-            "error",
+        'tailwindcss/no-arbitrary-value': 'off',
+        'tailwindcss/no-custom -classname': 'off',
+        'tailwindcss/no-contradicting-classname': [
+            'error',
             {
-                config: "tailwind.config.cjs",
-            },
-        ],
+                config: 'tailwind.config.cjs'
+            }
+        ]
     },
     // add prop type validation checking for our cards (we should later do this for subcomponents, but the list is really long)
     overrides: [
         {
-            files: ["src/components/ui/cards/*.jsx"],
-            excludedFiles: ["src/components/ui/cards/*.stories.jsx"],
+            files: ['src/components/ui/cards/*.jsx'],
+            excludedFiles: ['src/components/ui/cards/*.stories.jsx'],
             rules: {
-                "react/prop-types": 2,
-            },
-        },
-    ],
+                'react/prop-types': 2
+            }
+        }
+    ]
 };

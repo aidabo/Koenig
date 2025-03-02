@@ -102,7 +102,8 @@ const ImageHolder = ({
     imageCardDragHandler,
     imageFileDragHandler,
     isPinturaEnabled,
-    openImageEditor
+    openImageEditor//,
+    //floatDirection,
 }) => {
     if (previewSrc || src) {
         return (
@@ -146,8 +147,7 @@ export function ImageCard({
     imageCardDragHandler,
     imageFileDragHandler,
     isPinturaEnabled,
-    openImageEditor,
-    floatDirection
+    openImageEditor
 }) {
     const figureRef = React.useRef(null);
 
@@ -203,7 +203,8 @@ ImageHolder.propTypes = {
     imageFileDragHandler: PropTypes.object,
     imageCardDragHandler: PropTypes.object,
     isPinturaEnabled: PropTypes.bool,
-    openImageEditor: PropTypes.func
+    openImageEditor: PropTypes.func,
+    floatDirection: PropTypes.string //added float
 };
 
 PopulatedImageCard.propTypes = {
@@ -215,14 +216,16 @@ PopulatedImageCard.propTypes = {
     imageFileDragHandler: PropTypes.object,
     isPinturaEnabled: PropTypes.bool,
     openImageEditor: PropTypes.func,
-    onFileChange: PropTypes.func
+    onFileChange: PropTypes.func,
+    floatDirection: PropTypes.string //added float
 };
 
 EmptyImageCard.propTypes = {
     onFileChange: PropTypes.func,
     setFileInputRef: PropTypes.func,
     errors: PropTypes.array,
-    imageFileDragHandler: PropTypes.object
+    imageFileDragHandler: PropTypes.object,
+    floatDirection: PropTypes.string //added float
 };
 
 ImageCard.propTypes = {

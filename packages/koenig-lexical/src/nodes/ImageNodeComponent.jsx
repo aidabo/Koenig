@@ -183,6 +183,11 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
             const node = $getNodeByKey(nodeKey);
             node.cardWidth = newWidth; // this is a property on the node, not the card
             setCardWidth(newWidth); // sets the state of the toolbar component
+            //if wide or full, unset floating
+            if (newWidth !== 'regular') {
+                node.floatDirection = 'none';
+                setFloatDirection('none');
+            }
         });
     };
 
@@ -191,6 +196,11 @@ export function ImageNodeComponent({nodeKey, initialFile, src, altText, captionE
             const node = $getNodeByKey(nodeKey);
             node.floatDirection = newFloatDirection; // this is a property on the node, not the card
             setFloatDirection(newFloatDirection); // sets the state of the toolbar component
+            //if floating, unset wide and full
+            if (newFloatDirection !== 'none'){
+                node.cardWidth = 'regular';
+                setCardWidth('regular');                
+            }
         });
     };
 

@@ -11,7 +11,8 @@ export class ImageNode extends generateDecoratorNode({nodeType: 'image',
         {name: 'cardWidth', default: 'regular'},
         {name: 'width', default: null},
         {name: 'height', default: null},
-        {name: 'href', default: '', urlType: 'url'}
+        {name: 'href', default: '', urlType: 'url'},
+        {name: 'floatDirection', default: 'none'}
     ]}
 ) {
     /* @override */

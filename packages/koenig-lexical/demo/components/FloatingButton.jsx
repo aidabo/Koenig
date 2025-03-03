@@ -7,6 +7,10 @@ const FloatingButton = ({isOpen, ...props}) => {
                 JSON output
             </button>
             &nbsp;|&nbsp;
+            <button className="cursor-pointer" type="button" onClick={() => props.onClick('html')}>
+                Html
+            </button>
+            &nbsp;|&nbsp;
             <button className="cursor-pointer" type="button" onClick={() => props.onClick('tree')}>
                 State tree
             </button>

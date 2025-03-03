@@ -325,17 +325,17 @@ function DemoComposer({editorType, isMultiplayer, setWordCount, setTKCount}) {
             fileUploader={{useFileUpload: useFileUpload({isMultiplayer}), fileTypes}}
             initialEditorState={initialContent}
             isTKEnabled={true} // TODO: can we move this onto <KoenigEditor>?
-            multiplayerDocId={`demo/${WEBSOCKET_ID}`}
+            multiplayerDocId={`myview/${WEBSOCKET_ID}`}
             multiplayerEndpoint={WEBSOCKET_ENDPOINT}
             nodes={getAllowedNodes({editorType})}
         >
-            <div className={`koenig-demo relative h-full grow ${darkMode ? 'dark' : ''}`} style={isSidebarOpen ? {'--kg-breakout-adjustment': '440px'} : {}}>
+            <div className={`koenig-myview relative h-full grow ${darkMode ? 'dark' : ''}`} style={isSidebarOpen ? {'--kg-breakout-adjustment': '440px'} : {}}>
+                <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
                 {
                     !isMultiplayer && searchParams !== 'false'
                         ? <InitialContentToggle defaultContent={defaultContent} searchParams={searchParams} setSearchParams={setSearchParams} setTitle={setTitle} />
                         : null
                 }
-                <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
                 <div ref={containerRef} className="h-full overflow-auto overflow-x-hidden" onClick={focusEditor} onMouseDown={maybeSkipFocusEditor}>
                     <div className="mx-auto max-w-[1024px] px-6 py-[15vmin] lg:px-0">
                         {showTitle
@@ -358,7 +358,7 @@ function DemoComposer({editorType, isMultiplayer, setWordCount, setTKCount}) {
             />
             <div className="absolute z-20 flex h-full flex-col items-end sm:relative">
                 <Sidebar isOpen={isSidebarOpen} saveContent={saveContent} view={sidebarView} />
-                <FloatingButton isOpen={isSidebarOpen} onClick={openSidebar} />
+                <FloatingButton isOpen={isSidebarOpen} onClick={openSidebar} />                
             </div>
         </KoenigComposer>
     );

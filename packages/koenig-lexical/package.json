@@ -16,7 +16,8 @@
     ".": {
       "import": "./dist/koenig-lexical.js",
       "require": "./dist/koenig-lexical.umd.js"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
     "dev": "concurrently \"vite --host --force\" \"yarn build --watch\" \"yarn preview -l silent --host\" \"yarn workspace @tryghost/kg-default-nodes dev\" \"yarn workspace @tryghost/kg-default-transforms dev\"",

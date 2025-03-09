@@ -20,6 +20,10 @@ export function renderImageNode(node, options = {}) {
     if (node.cardWidth !== 'regular') {
         figureClasses += ` kg-width-${node.cardWidth}`;
     }
+    //added float layout
+    if (node.floatDirection && (node.floatDirection === 'left' || node.floatDirection === 'right')) {
+        figureClasses += ` kg-float-image kg-float-${node.floatDirection}`;
+    }    
     if (node.caption) {
         figureClasses += ' kg-card-hascaption';
     }

@@ -28,6 +28,11 @@ module.exports = {
         if (payload.cardWidth) {
             figureClass = `${figureClass} kg-width-${payload.cardWidth}`;
         }
+        //added float layout
+        if (payload.floatDirection && (payload.floatDirection === 'left' || payload.floatDirection === 'right')) {
+            figureClass += ` kg-float-image kg-float-${payload.floatDirection}`;
+        }    
+
         figure.setAttribute('class', figureClass);
 
         const img = dom.createElement('img');

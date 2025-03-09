@@ -1,6 +1,9 @@
-/* packages/koenig-lexical/src/styles/float-image.css */
+/*
+  Floating image card specific styles
+*/
+
 .kg-float-image {
-    margin: 20px 0;
+    margin: 20px 0px;
     clear: both;
   }
   

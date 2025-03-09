@@ -1,3 +1,9 @@
+/*  
+    Main content styling system (typography, spacing, cards)
+    This is extensive, defining typography, spacing, and styles for various elements like headings, paragraphs, lists, blockquotes, etc., 
+    using the `.kg-prose` class. It also includes media queries for responsiveness and dark mode styles. 
+*/
+
 .koenig-lexical {
     /* Content Styles
     /*

@@ -1,3 +1,8 @@
+/*
+ Editor container & dark mode fundamentals
+ Sets up the main editor container, dark mode, and some specific components like the emoji picker and tables
+*/
+
 .koenig-lexical {
     position: relative;
 }

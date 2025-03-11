@@ -8,13 +8,13 @@ import {mergeRegister} from '@lexical/utils';
 import {useKoenigSelectedCardContext} from '../context/KoenigSelectedCardContext';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 
-const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, children, float}) => {
+const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, children}) => {
     const {cardConfig} = React.useContext(KoenigComposerContext);
     const [editor] = useLexicalComposerContext();
     const [cardType, setCardType] = React.useState(null);
     const [captionHasFocus, setCaptionHasFocus] = React.useState(null);
     const [cardWidth, setCardWidth] = React.useState(width || 'regular');
-    const [floatDirection, setFloatDirection] = React.useState(float || 'none');
+    const [floatDirection, setFloatDirection] = React.useState('none');
     const containerRef = React.useRef(null);
     const skipClick = React.useRef(false);
 

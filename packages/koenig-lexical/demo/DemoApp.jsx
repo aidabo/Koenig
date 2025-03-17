@@ -3,6 +3,7 @@ import DollarIcon from './assets/icons/kg-dollar.svg?react';
 import FloatingButton from './components/FloatingButton';
 import InitialContentToggle from './components/InitialContentToggle';
 import LockIcon from './assets/icons/kg-lock.svg?react';
+import PreviewModeToggle from './components/PreviewModeToggle';
 import React, {useState} from 'react';
 import Sidebar from './components/Sidebar';
 import TitleTextBox from './components/TitleTextBox';
@@ -11,6 +12,9 @@ import WordCount from './components/WordCount';
 import basicContent from './content/basic-content.json';
 import content from './content/content.json';
 import minimalContent from './content/minimal-content.json';
+//import videojs from 'video.js';
+import Preview from './components/Preview';
+import {$generateHtmlFromNodes} from '@lexical/html';
 import {$getRoot, $isDecoratorNode} from 'lexical';
 import {
     BASIC_NODES, BASIC_TRANSFORMERS, KoenigComposableEditor,
@@ -38,7 +42,8 @@ const defaultCardConfig = {
     tenor: tenorConfig,
     fetchAutocompleteLinks: () => Promise.resolve([
         {label: 'Homepage', value: window.location.origin + '/'},
-        {label: 'Free signup', value: window.location.origin + '/#/portal/signup/free'}
+        //{label: 'Free signup', value: window.location.origin + '/#/portal/signup/free'}
+        {label: 'Signup', value: window.location.origin + '/signup'}
     ]),
     renderLabels: true,
     fetchLabels: () => Promise.resolve(['Label 1', 'Label 2']),
@@ -193,6 +198,39 @@ function DemoComposer({editorType, isMultiplayer, setWordCount, setTKCount}) {
     const titleRef = React.useRef(null);
     const containerRef = React.useRef(null);
 
+    const [showPreview, setShowPreview] = useState(false);
+    const [previewContent, setPreviewContent] = useState('');
+
+    // 1. 新增 PreviewComponent 组件
+    const PreviewComponent = ({htmlContent}) => {                
+        return (
+            <Preview
+                htmlContent={htmlContent}
+            ></Preview>
+        );
+    };
+
+    // 获取编辑器内容并生成 HTML
+    const updatePreviewContent = React.useCallback(() => {
+        if (editorAPI) {
+            editorAPI.editorInstance.getEditorState().read(() => {   
+                const html = $generateHtmlFromNodes(editorAPI.editorInstance);
+                // eslint-disable-next-line no-console
+                setPreviewContent(html);
+            });
+        }        
+    }, [editorAPI]);
+
+    // 3. 添加预览切换按钮
+    function togglePreviewMode() {
+        if (!showPreview){            
+            updatePreviewContent();
+            setShowPreview(true);
+        } else {
+            setShowPreview(false);
+        }
+    }
+
     function openSidebar(view = 'json') {
         if (isSidebarOpen && sidebarView === view) {
             return setIsSidebarOpen(false);
@@ -272,6 +310,8 @@ function DemoComposer({editorType, isMultiplayer, setWordCount, setTKCount}) {
     }
 
     function saveContent() {
+        // eslint-disable-next-line no-console
+        console.log(editorAPI);
         const serializedState = editorAPI.serialize();
         const encodedContent = encodeURIComponent(serializedState);
         searchParams.set('content', encodedContent);
@@ -325,33 +365,43 @@ function DemoComposer({editorType, isMultiplayer, setWordCount, setTKCount}) {
             fileUploader={{useFileUpload: useFileUpload({isMultiplayer}), fileTypes}}
             initialEditorState={initialContent}
             isTKEnabled={true} // TODO: can we move this onto <KoenigEditor>?
-            multiplayerDocId={`myview/${WEBSOCKET_ID}`}
+            multiplayerDocId={`demo/${WEBSOCKET_ID}`}
             multiplayerEndpoint={WEBSOCKET_ENDPOINT}
             nodes={getAllowedNodes({editorType})}
         >
-            <div className={`koenig-myview relative h-full grow ${darkMode ? 'dark' : ''}`} style={isSidebarOpen ? {'--kg-breakout-adjustment': '440px'} : {}}>
+            <div className={`koenig-demo relative h-full grow ${darkMode ? 'dark' : ''}`} style={isSidebarOpen ? {'--kg-breakout-adjustment': '440px'} : {}}>
+                <PreviewModeToggle previewMode={showPreview} togglePreviewMode={togglePreviewMode} />
                 <DarkModeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
                 {
                     !isMultiplayer && searchParams !== 'false'
                         ? <InitialContentToggle defaultContent={defaultContent} searchParams={searchParams} setSearchParams={setSearchParams} setTitle={setTitle} />
                         : null
                 }
-                <div ref={containerRef} className="h-full overflow-auto overflow-x-hidden" onClick={focusEditor} onMouseDown={maybeSkipFocusEditor}>
-                    <div className="mx-auto max-w-[1024px] px-6 py-[15vmin] lg:px-0">
-                        {showTitle
-                            ? <TitleTextBox ref={titleRef} editorAPI={editorAPI} setTitle={setTitle} title={title} />
-                            : null
-                        }
-                        <DemoEditor
-                            cursorDidExitAtTop={focusTitle}
-                            darkMode={darkMode}
-                            editorType={editorType}
-                            registerAPI={setEditorAPI}
-                            setTKCount={setTKCount}
-                            setWordCount={setWordCount}
-                        />
+                {showPreview ? (
+                    // 预览模式                    
+                    <PreviewComponent                     
+                        htmlContent={previewContent}
+                        title={title}
+                    />
+                ) :
+                    (<div ref={containerRef} className="h-full overflow-auto overflow-x-hidden" onClick={focusEditor} onMouseDown={maybeSkipFocusEditor}>
+                        <div className="mx-auto max-w-[1024px] px-6 py-[15vmin] lg:px-6">
+                            {showTitle
+                                ? <TitleTextBox ref={titleRef} editorAPI={editorAPI} setTitle={setTitle} title={title} />
+                                : null
+                            }
+                            <DemoEditor
+                                cursorDidExitAtTop={focusTitle}
+                                darkMode={darkMode}
+                                editorType={editorType}
+                                registerAPI={setEditorAPI}
+                                setTKCount={setTKCount}
+                                setWordCount={setWordCount}
+                            />
+                        </div>
                     </div>
-                </div>
+                    )}                
+
             </div>
             <Watermark
                 editorType={editorType || 'full'}

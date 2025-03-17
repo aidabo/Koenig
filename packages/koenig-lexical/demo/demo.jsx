@@ -5,12 +5,13 @@ import Navigator from './components/Navigator';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import RestrictedContentDemo from './RestrictedContentDemo';
-import {DesignSandbox} from '../src';
 import {
+    BrowserRouter,
     Route,
     HashRouter as Router,
     Routes
 } from 'react-router-dom';
+import {DesignSandbox} from '../src';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>

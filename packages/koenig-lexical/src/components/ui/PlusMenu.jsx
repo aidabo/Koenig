@@ -2,7 +2,7 @@ import PlusIcon from '../../assets/icons/plus.svg?react';
 
 export function PlusButton({onClick}) {
     return (
-        <div className="absolute left-[-32px] top-[-2px] xs:left-[-66px]" data-kg-plus-button>
+        <div className="absolute left-[-32px] top-[-0px] xs:left-[-66px]" data-kg-plus-button>
             <button
                 aria-label="Add a card"
                 className="group relative flex size-7 cursor-pointer items-center justify-center rounded-full border border-grey transition-all ease-linear hover:border-grey-800 dark:border-grey-800 dark:hover:border-grey-400 md:size-9"

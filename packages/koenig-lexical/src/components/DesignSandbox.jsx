@@ -187,9 +187,12 @@ const DesignSandbox = () => {
             <div className="z-[9999999] m-0 mb-3 max-h-[376px] w-[312px] flex-col overflow-y-auto rounded-lg bg-white bg-clip-padding p-0 text-sm shadow">
                 <CardMenuSection label="Primary" />
                 <CardMenuItem desc="Upload, or embed with /image [url]" Icon={ImageCardIcon} label="Image" />
+                <CardMenuItem desc="Upload and play a video" Icon={VideoCardIcon} label="Video" />
+                <CardMenuItem desc="Upload and play an audio file" Icon={AudioCardIcon} label="Audio" />
+                <CardMenuItem desc="Create an image gallery" Icon={GalleryCardIcon} label="Gallery" />
+                <CardMenuItem desc="Upload a downloadable file" Icon={FileCardIcon} label="File" />
                 <CardMenuItem desc="Insert a Markdown editor card" Icon={MarkdownCardIcon} label="Markdown" />
                 <CardMenuItem desc="Insert a raw HTML card" Icon={HtmlCardIcon} label="HTML" />
-                <CardMenuItem desc="Create an image gallery" Icon={GalleryCardIcon} label="Gallery" />
                 <CardMenuItem desc="Insert a dividing line" Icon={DividerCardIcon} label="Divider" />
                 <CardMenuItem desc="Embed a link as a visual bookmark" Icon={BookmarkCardIcon} label="Bookmark" />
                 <CardMenuItem desc="Only visible when delivered by email" Icon={EmailCardIcon} label="Email content" />
@@ -199,9 +202,6 @@ const DesignSandbox = () => {
                 <CardMenuItem desc="Info boxes that stand out" Icon={CalloutCardIcon} label="Callout" />
                 <CardMenuItem desc="Search and embed gifs" Icon={GifCardIcon} label="GIF" />
                 <CardMenuItem desc="Add collapsible content" Icon={ToggleCardIcon} label="Toggle" />
-                <CardMenuItem desc="Upload and play a video" Icon={VideoCardIcon} label="Video" />
-                <CardMenuItem desc="Upload and play an audio file" Icon={AudioCardIcon} label="Audio" />
-                <CardMenuItem desc="Upload a downloadable file" Icon={FileCardIcon} label="File" />
                 <CardMenuItem desc="Add a product recommendation" Icon={ProductCardIcon} label="Product" />
                 <CardMenuItem desc="Add a bold section header" Icon={HeaderCardIcon} label="Header" />
                 <CardMenuSection label="Embed" />

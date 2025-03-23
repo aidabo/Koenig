@@ -56,10 +56,14 @@ Default.args = {
     menu: new Map([
         ['Primary', [
             {label: 'Image', desc: 'Upload, or embed with /image [url]', Icon: ImageCardIcon},
+            {label: 'Video', desc: 'Upload and play a video', Icon: VideoCardIcon},
+            {label: 'Audio', desc: 'Upload and play an audio file', Icon: AudioCardIcon},
+            {label: 'Gallery', desc: 'Create an image gallery', Icon: GalleryCardIcon},
+            {label: 'GIF', desc: 'Search and embed gifs', Icon: GifCardIcon},
+            {label: 'File', desc: 'Upload a downloadable file', Icon: FileCardIcon},
             //{label: 'Float Image', desc: 'Upload, or embed with /image [url]', Icon: ImageCardIcon}, //just test
             {label: 'Markdown', desc: 'Insert a Markdown editor card', Icon: MarkdownCardIcon},
             {label: 'HTML', desc: 'Insert a raw HTML card', Icon: HtmlCardIcon},
-            {label: 'Gallery', desc: 'Create an image gallery', Icon: GalleryCardIcon},
             {label: 'Divider', desc: 'Insert a dividing line', Icon: DividerCardIcon},
             {label: 'Bookmark', desc: 'Embed a link as a visual bookmark', Icon: BookmarkCardIcon},
             {label: 'Email content', desc: 'Only visible when delivered by email', Icon: EmailCardIcon},
@@ -67,11 +71,7 @@ Default.args = {
             {label: 'Public Preview', desc: 'Attract signups with a public intro', Icon: PreviewCardIcon},
             {label: 'Button', desc: 'Add a button to your post', Icon: ButtonCardIcon},
             {label: 'Callout', desc: 'Info boxes that stand out', Icon: CalloutCardIcon},
-            {label: 'GIF', desc: 'Search and embed gifs', Icon: GifCardIcon},
             {label: 'Toggle', desc: 'Add collapsible content', Icon: ToggleCardIcon},
-            {label: 'Video', desc: 'Upload and play a video', Icon: VideoCardIcon},
-            {label: 'Audio', desc: 'Upload and play an audio file', Icon: AudioCardIcon},
-            {label: 'File', desc: 'Upload a downloadable file', Icon: FileCardIcon},
             {label: 'Product', desc: 'Add a product recommendation', Icon: ProductCardIcon},
             {label: 'Header', desc: 'Add a bold section header', Icon: HeaderCardIcon},
             {label: 'Signup', desc: 'Convert visitors into members', Icon: SignupCardIcon}

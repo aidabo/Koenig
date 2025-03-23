@@ -7,8 +7,8 @@ export const fileTypes = {
         extensions: ['gif', 'jpg', 'jpeg', 'png', 'svg', 'svgz', 'webp']
     },
     video: {
-        mimeTypes: ['video/mp4', 'video/webm', 'video/ogg'],
-        extensions: ['mp4', 'webm', 'ogv']
+        mimeTypes: ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'],
+        extensions: ['mp4', 'webm', 'ogv', 'mov']
     },
     audio: {
         mimeTypes: ['audio/mp3', 'audio/mpeg', 'audio/ogg', 'audio/wav', 'audio/vnd.wav', 'audio/wave', 'audio/x-wav', 'audio/mp4', 'audio/x-m4a'],

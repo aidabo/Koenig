@@ -22,7 +22,7 @@ export function renderVideoNode(node, options = {}) {
     return {element: element.firstElementChild};
 }
 
-export function cardTemplateOrigin({node, cardClasses}) {
+export function cardTemplate1({node, cardClasses}) {
     const width = node.width;
     const height = node.height;
     const posterSpacerSrc = `https://img.spacergif.org/v1/${width}x${height}/0a/spacer.png`;
@@ -105,7 +105,8 @@ export function getVideoType(filename) {
         webm: 'video/webm',
         ogg: 'video/ogg',
         ogv: 'video/ogg',
-        mov: 'video/quicktime',
+        //fake as quicktime as mp4 because MOV is not supported universal, chrome not automatically play
+        mov: /*'video/quicktime',*/ 'video/mp4', 
         mpeg: 'video/mpeg',
         mpg: 'video/mpeg',
         avi: 'video/x-msvideo',
@@ -122,41 +123,32 @@ export function cardTemplate({node, cardClasses}) {
     const width = node.width;
     const height = node.height;
     const autoplayAttr = node.loop ? 'loop autoplay muted' : '';
+    const posterSpacerSrc = `https://img.spacergif.org/v1/${width}x${height}/0a/spacer.png`;
     const thumbnailSrc = node.customThumbnailSrc || node.thumbnailSrc;
     const videoType = getVideoType(node.src) || 'mp4';
+    const maxDimension = Math.max(width, height);
+    const aspectRatio = width / height;
+    const containerStyle = `width:100%; max-width:${maxDimension}px; aspect-ratio: ${aspectRatio}; margin: '0 auto'`;
 
     return (
         `
         <figure class="${cardClasses}" data-kg-thumbnail=${node.thumbnailSrc} data-kg-custom-thumbnail=${node.customThumbnailSrc}>
-            <div class="kg-video-container data-vjs-player">
+            <div class="kg-video-container data-vjs-player" style="${containerStyle}">
                 <video
                     controls
-                    fluid
                     responsive
                     controlsList="nodownload" 
                     class="video-js vjs-big-play-centered vjs-paused"
-                    src="${node.src}"
-                    poster="${thumbnailSrc}"
+                    poster="${posterSpacerSrc}"
                     width="${width}"
                     height="${height}"
                     ${autoplayAttr}
                     playsinline
-                    preload="true"
-                    style="background: transparent url('${thumbnailSrc}') 50% 50% / cover no-repeat;"
-                    data-setup='{}'
+                    preload="auto"
+                    style="background: transparent url('${thumbnailSrc}') 50% 50% / cover no-repeat; width:100%; height:100%;"
+                    data-setup='{"fluid": true}'
                 >
                 <source src="${node.src}" type="${videoType}"></source>
-
-                    <button
-                        class="vjs-big-play-button"
-                        type="button"
-                        title="Play Video"
-                        aria-disabled="false"
-                    >
-                        <span class="vjs-icon-placeholder" aria-hidden="true"></span>
-                        <span class="vjs-control-text" aria-live="polite">Play Video</span>
-                    </button>
-
                 <p class="vjs-no-js">
                     To view this video please enable JavaScript, and consider upgrading to a
                     web browser that

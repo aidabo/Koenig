@@ -116,7 +116,14 @@ export function getVideoType(filename) {
         '3g2': 'video/3gpp2'
     };
   
-    return typeMap[extension] || null;
+    //S3 storage extension maybe is mp4-1 etc for the same filename. 
+    var keys = Object.keys(typeMap).filter(key => extension.indexOf(key) >= 0);
+    if (keys && keys.length > 0) {
+        return typeMap[keys[0]]; 
+    } else {
+        return null;
+    }
+    //return typeMap[extension] || null;
 }
 
 export function cardTemplate({node, cardClasses}) {
@@ -125,7 +132,7 @@ export function cardTemplate({node, cardClasses}) {
     const autoplayAttr = node.loop ? 'loop autoplay muted' : '';
     const posterSpacerSrc = `https://img.spacergif.org/v1/${width}x${height}/0a/spacer.png`;
     const thumbnailSrc = node.customThumbnailSrc || node.thumbnailSrc;
-    const videoType = getVideoType(node.src) || 'mp4';
+    const videoType = getVideoType(node.src) || 'video/mp4';
     const maxDimension = Math.max(width, height);
     const aspectRatio = width / height;
     const containerStyle = `width:100%; max-width:${maxDimension}px; aspect-ratio: ${aspectRatio}; margin: '0 auto'`;

@@ -94,10 +94,10 @@ export function getVideoType(filename) {
     if (!filename) {
         return null;
     }
-  
+
     // Get file extension
     const extension = filename.split('.').pop().toLowerCase();
-  
+
     // Map extensions to MIME types
     const typeMap = {
         mp4: 'video/mp4',
@@ -106,7 +106,7 @@ export function getVideoType(filename) {
         ogg: 'video/ogg',
         ogv: 'video/ogg',
         //fake as quicktime as mp4 because MOV is not supported universal, chrome not automatically play
-        mov: /*'video/quicktime',*/ 'video/mp4', 
+        mov: /*'video/quicktime',*/ 'video/mp4',
         mpeg: 'video/mpeg',
         mpg: 'video/mpeg',
         avi: 'video/x-msvideo',
@@ -115,11 +115,11 @@ export function getVideoType(filename) {
         '3gp': 'video/3gpp',
         '3g2': 'video/3gpp2'
     };
-  
+
     //S3 storage extension maybe is mp4-1 etc for the same filename. 
     let keys = Object.keys(typeMap).filter(key => extension.indexOf(key) >= 0);
     if (keys && keys.length > 0) {
-        return typeMap[keys[0]]; 
+        return typeMap[keys[0]];
     } else {
         return null;
     }
@@ -137,7 +137,7 @@ export function cardTemplate({node, cardClasses}) {
     // const aspectRatio = width / height;
     // const containerStyle = `width:100%; max-width:${maxDimension}px; aspect-ratio: ${aspectRatio}; margin: '0 auto'`;
     // eslint-disable-next-line no-confusing-arrow
-    const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b)); 
+    const gcd = (a, b) => (b === 0 ? a : gcd(b, a % b));
     const divisor = gcd(width, height);
     const aspectRatioStr = `${width / divisor} / ${height / divisor}`;
     const containerStyle = `width:100%; max-width:${maxDimension}px; aspect-ratio: ${aspectRatioStr};`;
@@ -149,27 +149,27 @@ export function cardTemplate({node, cardClasses}) {
                 <video
                     controls
                     responsive
-                    controlsList="nodownload" 
-                    class="video-js vjs-big-play-centered vjs-paused"
+                    controlsList="nodownload"
+                    class="video-js vjs-default-skin vjs-big-play-centered"
                     poster="${posterSpacerSrc}"
                     width="${width}"
                     height="${height}"
                     ${autoplayAttr}
                     playsinline
+                    webkit-playsinline
                     preload="auto"
                     style="background: transparent url('${thumbnailSrc}') 50% 50% / cover no-repeat; width:100%; height:100%;"
                     data-setup='{"fluid": true}'
                 >
-                <source src="${node.src}" type="${videoType}"></source>
-                <p class="vjs-no-js">
-                    To view this video please enable JavaScript, and consider upgrading to a
-                    web browser that
-                    <a href="https://videojs.com/html5-video-support/" target="_blank">
-                        supports HTML5 video
-                    </a>
-                </p>
+                    <source src="${node.src}" type="${videoType}" />
+                        <p class="vjs-no-js">
+                            To view this video please enable JavaScript, and consider upgrading to a
+                            web browser that
+                            <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                supports HTML5 video
+                            </a>
+                        </p>
                 </video>
-
             </div>
             ${node.caption ? `<figcaption>${node.caption}</figcaption>` : ''}
         </figure>

@@ -16,10 +16,12 @@
     "setup": "yarn && lerna run build",
     "test": "lerna run test",
     "lint": "lerna run lint",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx,.cjs packages/koenig-lexical/src packages/koenig-lexical/test packages/kg-default-nodes/lib packages/kg-default-nodes/test packages/kg-lexical-html-renderer/lib packages/kg-lexical-html-renderer/test packages/kg-markdown-html-renderer/test",
     "preship": "lerna run preversion && yarn test",
     "fix": "yarn cache clean && rm -rf node_modules && yarn",
     "ship": "IS_SHIPPING=true lerna publish --git-remote ${GHOST_UPSTREAM:-origin}",
-    "main": "git checkout main && git pull ${GHOST_UPSTREAM:-origin} main && yarn"
+    "main": "git checkout main && git pull ${GHOST_UPSTREAM:-origin} main && yarn",
+    "pub": "bash -c 'cd ~/work/legacy/03-koenig/packages/koenig-lexical && yalc publish &&  cd ~/work/legacy/03-koenig/packages/kg-default-nodes && yalc publish && cd ~/work/legacy/01-jibunsee-react/apps/host/ && yalc update && cd ~/work/legacy/00-Ghost-5.116.2/ghost/core && yalc update && cd ~/work/legacy/03-koenig'"
   },
   "devDependencies": {
     "eslint": "8.57.0",
@@ -64,7 +66,9 @@
         ]
       },
       {
-        "matchPackageNames": ["@tryghost/mobiledoc-kit"],
+        "matchPackageNames": [
+          "@tryghost/mobiledoc-kit"
+        ],
         "enabled": false
       }
     ]

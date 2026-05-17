@@ -1,3 +1,4 @@
+import KoenigComposerContext from '../../context/KoenigComposerContext.jsx';
 import React from 'react';
 import {$createAsideNode} from '../../nodes/AsideNode';
 import {
@@ -9,11 +10,13 @@ import {
     $createParagraphNode,
     $getSelection,
     $isRangeSelection,
+    $isTextNode,
     FORMAT_TEXT_COMMAND
 } from 'lexical';
 import {$getNearestNodeOfType} from '@lexical/utils';
 import {$isListNode, ListNode} from '@lexical/list';
 import {$setBlocksType} from '@lexical/selection';
+import {Dropdown} from './Dropdown';
 import {HeadingNode, QuoteNode} from '@lexical/rich-text';
 import {
     ToolbarMenu,
@@ -40,6 +43,13 @@ const blockTypeToBlockName = {
     aside: 'Aside'
 };
 
+const DEFAULT_FONT_FAMILIES = [
+    {label: 'Default', name: 'default', value: ''},
+    {label: 'Sans', name: 'sans', value: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Droid Sans", "Helvetica Neue", sans-serif'},
+    {label: 'Serif', name: 'serif', value: 'Georgia, Times, serif'},
+    {label: 'Mono', name: 'mono', value: 'Consolas, Liberation Mono, Menlo, Courier, monospace'}
+];
+
 function quoteIcon(blockType = '') {
     if (blockType.endsWith?.('quote')) {
         return 'quoteOne';
@@ -58,9 +68,11 @@ export default function FormatToolbar({
     onSnippetClick,
     hiddenFormats = []
 }) {
+    const {cardConfig} = React.useContext(KoenigComposerContext);
     const [isBold, setIsBold] = React.useState(false);
     const [isItalic, setIsItalic] = React.useState(false);
     const [blockType, setBlockType] = React.useState('paragraph');
+    const [fontFamily, setFontFamily] = React.useState('default');
 
     let hideHeading = false;
     if (!editor.hasNodes([HeadingNode])){
@@ -82,6 +94,73 @@ export default function FormatToolbar({
         hideBold = true;
     }
 
+    const fontFamilies = cardConfig?.fontFamilies?.length ? cardConfig.fontFamilies : DEFAULT_FONT_FAMILIES;
+
+    const setStyleProperty = (styleString, property, value) => {
+        const element = document.createElement('span');
+        element.style.cssText = styleString || '';
+
+        if (value) {
+            element.style.setProperty(property, value);
+        } else {
+            element.style.removeProperty(property);
+        }
+
+        return element.getAttribute('style') || '';
+    };
+
+    const getFontFamilyValue = (styleString = '') => {
+        const element = document.createElement('span');
+        element.style.cssText = styleString || '';
+        return element.style.fontFamily || '';
+    };
+
+    const normalizeFontFamilyValue = (value = '') => {
+        return `${value}`.replace(/['"]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+    };
+
+    const resolveFontFamilyKey = React.useCallback((styleString = '') => {
+        const currentValue = normalizeFontFamilyValue(getFontFamilyValue(styleString));
+        if (!currentValue) {
+            return 'default';
+        }
+
+        const matchedFamily = fontFamilies.find((family) => {
+            return normalizeFontFamilyValue(family.value) === currentValue;
+        });
+
+        if (matchedFamily) {
+            return matchedFamily.name;
+        }
+
+        return fontFamilies.find((family) => {
+            const familyValue = normalizeFontFamilyValue(family.value);
+            return familyValue && currentValue.includes(familyValue);
+        })?.name || 'default';
+    }, [fontFamilies]);
+
+    const applyFontFamily = (familyName) => {
+        const selectedFamily = fontFamilies.find(item => item.name === familyName)?.value || '';
+
+        editor.update(() => {
+            const selection = $getSelection();
+
+            if (!$isRangeSelection(selection)) {
+                return;
+            }
+
+            selection.getNodes().forEach((node) => {
+                if ($isTextNode(node)) {
+                    node.setStyle(setStyleProperty(node.getStyle(), 'font-family', selectedFamily));
+                }
+            });
+
+            selection.style = setStyleProperty(selection.style || '', 'font-family', selectedFamily);
+        });
+
+        setFontFamily(familyName);
+    };
+
     const updateState = React.useCallback(() => {
         editor.getEditorState().read(() => {
             // Should not to pop up the floating toolbar when using IME input
@@ -96,6 +175,7 @@ export default function FormatToolbar({
             // update text format
             setIsBold(selection.hasFormat('bold'));
             setIsItalic(selection.hasFormat('italic'));
+            setFontFamily(resolveFontFamilyKey(selection.style));
 
             const anchorNode = getSelectedNode(selection);
             const element = anchorNode.getKey() === 'root'
@@ -122,7 +202,7 @@ export default function FormatToolbar({
                 }
             }
         });
-    }, [editor]);
+    }, [editor, resolveFontFamilyKey]);
 
     React.useEffect(() => {
         updateState();
@@ -174,6 +254,16 @@ export default function FormatToolbar({
 
     return (
         <ToolbarMenu>
+            <li className="m-0 flex p-0">
+                <div className="my-1 w-40">
+                    <Dropdown
+                        dataTestId="font-family"
+                        menu={fontFamilies}
+                        value={fontFamily}
+                        onChange={applyFontFamily}
+                    />
+                </div>
+            </li>
             <ToolbarMenuItem
                 data-kg-toolbar-button="bold"
                 hide={hideBold}

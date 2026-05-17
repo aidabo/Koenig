@@ -1,4 +1,5 @@
 import React from 'react';
+import {$createParagraphNode, $getRoot, $getSelection, $isDecoratorNode, $isNodeSelection, $isRangeSelection} from 'lexical';
 import {$createVideoNode, INSERT_VIDEO_COMMAND, VideoNode} from '../nodes/VideoNode';
 import {COMMAND_PRIORITY_HIGH, COMMAND_PRIORITY_LOW} from 'lexical';
 import {INSERT_CARD_COMMAND} from './KoenigBehaviourPlugin';
@@ -18,10 +19,33 @@ export const VideoPlugin = () => {
             editor.registerCommand(
                 INSERT_VIDEO_COMMAND,
                 async (dataset) => {
-                    const cardNode = $createVideoNode(dataset);
-                    editor.dispatchCommand(INSERT_CARD_COMMAND, {cardNode});
+                    let inserted = false;
 
-                    return true;
+                    editor.update(() => {
+                        let selection = $getSelection();
+
+                        if (!$isRangeSelection(selection) && !$isNodeSelection(selection)) {
+                            const root = $getRoot();
+                            let paragraphNode = root.getLastChild();
+
+                            if (!paragraphNode || $isDecoratorNode(paragraphNode)) {
+                                paragraphNode = $createParagraphNode();
+                                root.append(paragraphNode);
+                            }
+
+                            paragraphNode.selectEnd();
+                            selection = $getSelection();
+                        }
+
+                        if (!$isRangeSelection(selection) && !$isNodeSelection(selection)) {
+                            return;
+                        }
+
+                        const cardNode = $createVideoNode(dataset);
+                        inserted = editor.dispatchCommand(INSERT_CARD_COMMAND, {cardNode});
+                    });
+
+                    return inserted;
                 },
                 COMMAND_PRIORITY_LOW
             ),

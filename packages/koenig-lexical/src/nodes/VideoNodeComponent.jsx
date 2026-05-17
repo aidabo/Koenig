@@ -14,6 +14,8 @@ import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
 
 export function VideoNodeComponent({
     nodeKey,
+    src,
+    fileName,
     thumbnail,
     customThumbnail,
     captionEditor,
@@ -206,9 +208,11 @@ export function VideoNodeComponent({
                 customThumbnail={customThumbnail}
                 customThumbnailUploader={customThumbnailUploader}
                 fileInputRef={videoFileInputRef}
+                fileName={fileName}
                 isEditing={cardContext.isEditing}
                 isLoopChecked={isLoopChecked}
                 isSelected={cardContext.isSelected}
+                src={src}
                 thumbnail={previewThumbnail || thumbnail}
                 thumbnailDragHandler={thumbnailDragHandler}
                 thumbnailMimeTypes={fileUploader.fileTypes.image.mimeTypes}

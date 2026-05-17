@@ -22,6 +22,7 @@ import {GalleryPlugin} from '../plugins/GalleryPlugin';
 import {HeaderPlugin} from '../plugins/HeaderPlugin';
 import {KoenigSnippetPlugin} from '../plugins/KoenigSnippetPlugin';
 import {ListPlugin} from '@lexical/react/LexicalListPlugin';
+import {MultiColumnPlugin} from '../plugins/MultiColumnPlugin';
 import {PaywallPlugin} from '../plugins/PaywallPlugin';
 import {ProductPlugin} from '../plugins/ProductPlugin';
 import {SignupPlugin} from '../plugins/SignupPlugin';
@@ -66,6 +67,7 @@ export const AllDefaultPlugins = () => {
             <EmbedPlugin />
             <SignupPlugin />
             <CollectionPlugin />
+            <MultiColumnPlugin />
             <CallToActionPlugin />
             
             {/* Custom Plugin*/}

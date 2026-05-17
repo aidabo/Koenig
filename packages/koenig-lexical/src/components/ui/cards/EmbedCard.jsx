@@ -40,6 +40,7 @@ export function EmbedCard({captionEditor, captionEditorInitialState, html, isSel
 
 function EmbedIframe({dataTestId, html}) {
     const iframeRef = React.useRef(null);
+    const mutationObserverRef = React.useRef(null);
 
     const handleResize = () => {
         // get ratio from nested iframe if present (eg, Vimeo)
@@ -88,8 +89,6 @@ function EmbedIframe({dataTestId, html}) {
         childList: true,
         subtree: true
     };
-    const mutationObserver = new MutationObserver(handleResize);
-
     const handleLoad = () => {
         const iframeBody = iframeRef.current.contentDocument.body;
         // apply styles
@@ -99,7 +98,8 @@ function EmbedIframe({dataTestId, html}) {
         // resize first load
         handleResize();
         // start listening to mutations when the iframe content is loaded
-        mutationObserver.observe(iframeRef.current.contentWindow.document, config);
+        mutationObserverRef.current = new MutationObserver(handleResize);
+        mutationObserverRef.current.observe(iframeRef.current.contentWindow.document, config);
     };
 
     // register listener for window resize events
@@ -110,7 +110,7 @@ function EmbedIframe({dataTestId, html}) {
         // cleanup listener when component unmounts
         return function cleanup() {
             resizeObserver.disconnect();
-            mutationObserver.disconnect();
+            mutationObserverRef.current?.disconnect();
         };
     }, []);
 

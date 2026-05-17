@@ -74,7 +74,17 @@ export default class TextContent {
             if ($isTextNode(node)) {
                 // shortcut format code for plain text
                 if (node.getFormat() === 0) {
-                    currentNode.append(node.getTextContent());
+                    const textContent = node.getTextContent();
+                    const nodeStyle = node.getStyle?.() || '';
+
+                    if (nodeStyle) {
+                        const styledSpan = document.createElement('span');
+                        styledSpan.setAttribute('style', nodeStyle);
+                        styledSpan.append(textContent);
+                        currentNode.append(styledSpan);
+                    } else {
+                        currentNode.append(textContent);
+                    }
                     continue;
                 }
 
@@ -121,7 +131,17 @@ export default class TextContent {
                 });
 
                 // insert text
-                currentNode.append(node.getTextContent());
+                const textContent = node.getTextContent();
+                const nodeStyle = node.getStyle?.() || '';
+
+                if (nodeStyle) {
+                    const styledSpan = document.createElement('span');
+                    styledSpan.setAttribute('style', nodeStyle);
+                    styledSpan.append(textContent);
+                    currentNode.append(styledSpan);
+                } else {
+                    currentNode.append(textContent);
+                }
 
                 // close tags in correct order if next node doesn't have the format
                 // links are their own formatting islands so all formats need to close before a link

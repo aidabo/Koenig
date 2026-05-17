@@ -26,7 +26,7 @@ export class VideoNode extends BaseVideoNode {
             triggerFileDialog: true
         },
         matches: ['video'],
-        priority: 13,
+        priority: 2,
         shortcut: '/video'
     }];
 
@@ -93,9 +93,11 @@ export class VideoNode extends BaseVideoNode {
                     captionEditorInitialState={this.__captionEditorInitialState}
                     cardWidth={this.cardWidth}
                     customThumbnail={this.customThumbnailSrc}
+                    fileName={this.fileName}
                     initialFile={this.__initialFile}
                     isLoopChecked={this.loop}
                     nodeKey={this.getKey()}
+                    src={this.src}
                     thumbnail={this.thumbnailSrc}
                     totalDuration={this.formattedDuration}
                     triggerFileDialog={this.__triggerFileDialog}

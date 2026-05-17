@@ -247,17 +247,19 @@ describe('ImageNode', function () {
                 output.should.not.containEql('srcset');
             }));
 
-            it('is included for absolute images when siteUrl has trailing slash');
-            it('is omitted when no contentImageSizes are passed as options');
-            it('is omitted when `srcsets: false` is passed in as an option');
-            it('is omitted when canTransformImages is provided and returns false');
-            it('is omitted when no width is provided');
-            it('is omitted when image is smaller than minimum responsive width');
-            it('omits sizes larger than image width and includes origin image width if smaller than largest responsive width');
-            it('works correctly with subdirectories');
-            it('works correctly with absolute subdirectories');
-            it('is included when src is an Unsplash image');
-            it('has same size omission behaviour for Unsplash as local files');
+            /* eslint-disable ghost/mocha/no-pending-tests */
+            it.skip('is included for absolute images when siteUrl has trailing slash');
+            it.skip('is omitted when no contentImageSizes are passed as options');
+            it.skip('is omitted when `srcsets: false` is passed in as an option');
+            it.skip('is omitted when canTransformImages is provided and returns false');
+            it.skip('is omitted when no width is provided');
+            it.skip('is omitted when image is smaller than minimum responsive width');
+            it.skip('omits sizes larger than image width and includes origin image width if smaller than largest responsive width');
+            it.skip('works correctly with subdirectories');
+            it.skip('works correctly with absolute subdirectories');
+            it.skip('is included when src is an Unsplash image');
+            it.skip('has same size omission behaviour for Unsplash as local files');
+            /* eslint-enable ghost/mocha/no-pending-tests */
         });
 
         describe('sizes attribute', function () {
@@ -284,23 +286,27 @@ describe('ImageNode', function () {
                 output.should.containEql('sizes="(min-width: 1200px) 1200px"');
             }));
 
-            it('is omitted when srcset is not added');
-            it('is omitted when width is missing');
-            it('is included when only height is missing');
-            it('is omitted for standard images when width is less than 720');
-            it('is omitted for wide images when width is less than 1200');
-            it('is omitted for full images');
+            /* eslint-disable ghost/mocha/no-pending-tests */
+            it.skip('is omitted when srcset is not added');
+            it.skip('is omitted when width is missing');
+            it.skip('is included when only height is missing');
+            it.skip('is omitted for standard images when width is less than 720');
+            it.skip('is omitted for wide images when width is less than 1200');
+            it.skip('is omitted for full images');
+            /* eslint-enable ghost/mocha/no-pending-tests */
         });
 
         describe('email target', function () {
-            it('adds width/height and uses resized local image');
-            it('adds width/height and uses resized unsplash image');
-            it('adds width/height and uses original src when local image can\'t be transformed');
-            it('uses original image if size is smaller than "retina" size');
-            it('uses original image width/height if image is smaller than 600px wide');
-            it('skips width/height and resize if payload is missing dimensions');
-            it('resizes Unsplash images even if width/height data is missing');
-            it('omits srcset attribute');
+            /* eslint-disable ghost/mocha/no-pending-tests */
+            it.skip('adds width/height and uses resized local image');
+            it.skip('adds width/height and uses resized unsplash image');
+            it.skip('adds width/height and uses original src when local image can\'t be transformed');
+            it.skip('uses original image if size is smaller than "retina" size');
+            it.skip('uses original image width/height if image is smaller than 600px wide');
+            it.skip('skips width/height and resize if payload is missing dimensions');
+            it.skip('resizes Unsplash images even if width/height data is missing');
+            it.skip('omits srcset attribute');
+            /* eslint-enable ghost/mocha/no-pending-tests */
         });
     });
 

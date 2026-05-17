@@ -28,8 +28,16 @@ const KoenigNestedEditor = ({
     dataTestId,
     children
 }) => {
-    const initialNodes = nodes === 'minimal' ? MINIMAL_NODES : BASIC_NODES;
-    const markdownTransformers = nodes === 'minimal' ? MINIMAL_TRANSFORMERS : BASIC_TRANSFORMERS;
+    const initialNodes = Array.isArray(nodes)
+        ? nodes
+        : nodes === 'minimal'
+            ? MINIMAL_NODES
+            : BASIC_NODES;
+    const markdownTransformers = Array.isArray(nodes)
+        ? BASIC_TRANSFORMERS
+        : nodes === 'minimal'
+            ? MINIMAL_TRANSFORMERS
+            : BASIC_TRANSFORMERS;
 
     return (
         <KoenigNestedComposer

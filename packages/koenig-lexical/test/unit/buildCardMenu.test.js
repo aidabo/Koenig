@@ -44,6 +44,30 @@ describe('buildCardMenu', function () {
         expect(cardMenu.maxItemIndex).to.equal(1);
     });
 
+    it('sorts primary cards by priority for slash and plus menus', async function () {
+        const nodes = [
+            ['file', {kgMenu: {label: 'File', desc: 'File card', Icon, insertCommand: 'insert_file', priority: 5}}],
+            ['markdown', {kgMenu: {label: 'Markdown', desc: 'Markdown card', Icon, insertCommand: 'insert_markdown', priority: 3}}],
+            ['image', {kgMenu: {label: 'Image', desc: 'Image card', Icon, insertCommand: 'insert_image', priority: 1}}],
+            ['gallery', {kgMenu: {label: 'Gallery', desc: 'Gallery card', Icon, insertCommand: 'insert_gallery', priority: 4}}],
+            ['video', {kgMenu: {label: 'Video', desc: 'Video card', Icon, insertCommand: 'insert_video', priority: 2}}],
+            ['divider', {kgMenu: {label: 'Divider', desc: 'Divider card', Icon, insertCommand: 'insert_divider', priority: 7}}],
+            ['html', {kgMenu: {label: 'HTML', desc: 'HTML card', Icon, insertCommand: 'insert_html', priority: 6}}]
+        ];
+
+        const cardMenu = buildCardMenu(nodes);
+
+        expect([...cardMenu.menu.get('Primary').map(item => item.label)]).deep.equal([
+            'Image',
+            'Video',
+            'Markdown',
+            'Gallery',
+            'File',
+            'HTML',
+            'Divider'
+        ]);
+    });
+
     it('can add cards to other headers', async function () {
         const nodes = [
             ['one', {kgMenu: {

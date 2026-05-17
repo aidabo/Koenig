@@ -9,15 +9,15 @@ import {createCommand} from 'lexical';
 export const INSERT_MARKDOWN_COMMAND = createCommand();
 
 export class MarkdownNode extends BaseMarkdownNode {
-    static kgMenu = {
+    static kgMenu = [{
         label: 'Markdown',
         desc: 'Insert a Markdown editor card',
         Icon: MarkdownCardIcon,
         insertCommand: INSERT_MARKDOWN_COMMAND,
         matches: ['markdown', 'md'],
-        priority: 2,
+        priority: 3,
         shortcut: '/md'
-    };
+    }];
 
     getIcon() {
         return MarkdownCardIcon;

@@ -13,6 +13,8 @@ import {ReadOnlyOverlay} from '../ReadOnlyOverlay';
 import {openFileSelection} from '../../../utils/openFileSelection';
 
 function PopulatedVideoCard({
+    src,
+    fileName,
     thumbnail,
     customThumbnail,
     onCustomThumbnailChange,
@@ -53,8 +55,12 @@ function PopulatedVideoCard({
     return (
         <>
             <div className="not-kg-prose relative" data-testid="video-card-populated">
-                <div>
-                    <img alt="Video thumbnail" className="mx-auto" src={thumbnail} />
+                <div className="relative overflow-hidden bg-black">
+                    {thumbnail ? (
+                        <img alt="Video thumbnail" className="mx-auto" src={thumbnail} />
+                    ) : (
+                        <div className="aspect-video w-full bg-gradient-to-br from-zinc-800 to-zinc-900" />
+                    )}
                     {customThumbnail && <img alt="Video custom thumbnail" className="absolute inset-0 size-full bg-white object-cover" src={customThumbnail} />}
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-black/0 via-black/5 to-black/30">
@@ -64,6 +70,11 @@ function PopulatedVideoCard({
                         </button>
                     )}
                 </div>
+                {!thumbnail && !customThumbnail && (
+                    <div className="absolute inset-x-0 bottom-14 px-4 text-center text-sm font-medium text-white/85">
+                        {fileName || src || 'Video'}
+                    </div>
+                )}
                 <div className={`absolute bottom-0 flex h-20 w-full justify-end bg-gradient-to-b from-black/0 to-black/50 ${cardWidth === 'full' ? 'px-7 py-4' : 'px-4'}`}>
                     <MediaPlayer duration={totalDuration} theme='light' />
                 </div>
@@ -145,6 +156,7 @@ function EmptyVideoCard({onFileChange, fileInputRef, errors, videoMimeTypes = []
 }
 
 const VideoHolder = ({
+    src,
     fileInputRef,
     onVideoFileChange,
     videoDragHandler,
@@ -153,10 +165,10 @@ const VideoHolder = ({
     videoMimeTypes,
     ...props
 }) => {
-    const showPopulatedCard = props.customThumbnail || props.thumbnail || videoUploader.isLoading;
+    const showPopulatedCard = props.customThumbnail || props.thumbnail || src || videoUploader.isLoading;
     if (showPopulatedCard) {
         return (
-            <PopulatedVideoCard {...props} videoUploader={videoUploader}/>
+            <PopulatedVideoCard {...props} fileName={props.fileName} src={src} videoUploader={videoUploader}/>
         );
     } else {
         return (
@@ -200,6 +212,8 @@ VideoCard.propTypes = {
 };
 
 PopulatedVideoCard.propTypes = {
+    src: PropTypes.string,
+    fileName: PropTypes.string,
     thumbnail: PropTypes.string,
     customThumbnail: PropTypes.string,
     onCustomThumbnailChange: PropTypes.func,
@@ -225,12 +239,14 @@ EmptyVideoCard.propTypes = {
 };
 
 VideoHolder.propTypes = {
+    src: PropTypes.string,
     fileInputRef: PropTypes.object,
     onVideoFileChange: PropTypes.func,
     videoDragHandler: PropTypes.object,
     videoUploader: PropTypes.object,
     videoUploadErrors: PropTypes.array,
     videoMimeTypes: PropTypes.array,
+    fileName: PropTypes.string,
     customThumbnail: PropTypes.string,
     thumbnail: PropTypes.string
 };

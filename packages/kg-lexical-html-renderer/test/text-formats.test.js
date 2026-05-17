@@ -111,4 +111,10 @@ describe('ExtendedTextNode', function () {
         input: `{"root":{"children":[{"children":[{"detail":0,"format":2,"mode":"normal","style":"","text":"Italic ","type":"extended-text","version":1},{"detail":0,"format":3,"mode":"normal","style":"","text":"Strong","type":"extended-text","version":1},{"detail":0,"format":2,"mode":"normal","style":"","text":" Italic","type":"extended-text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
         output: `<p><em>Italic <strong>Strong</strong> Italic</em></p>`
     }));
+
+    it('preserves font family style', shouldRender({
+        options: {nodes: [ExtendedTextNode]},
+        input: `{"root":{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"font-family: Georgia;","text":"Styled","type":"extended-text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
+        output: `<p><span style="font-family: Georgia;">Styled</span></p>`
+    }));
 });

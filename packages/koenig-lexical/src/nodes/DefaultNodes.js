@@ -23,6 +23,7 @@ import {EmailCtaNode} from './EmailCtaNode';
 import {EmailNode} from './EmailNode';
 import {EmbedNode} from './EmbedNode';
 import {FileNode} from './FileNode';
+import {MultiColumnNode} from './MultiColumnNode';
 //import {FloatImageNode} from './FloatImageNode';
 import {GalleryNode} from './GalleryNode';
 import {HeaderNode} from './HeaderNode';
@@ -74,6 +75,7 @@ const DEFAULT_NODES = [
     GalleryNode,
     SignupNode,
     CollectionNode,
+    MultiColumnNode,
     TKNode,
     AtLinkNode,
     AtLinkSearchNode,

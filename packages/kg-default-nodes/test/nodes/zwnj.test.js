@@ -29,4 +29,10 @@ describe('ZWNJNode', function () {
         const zwnjNode = $createZWNJNode();
         $isZWNJNode(zwnjNode).should.be.true();
     }));
+
+    it('imports JSON into a zwnj node', editorTest(function () {
+        const zwnjNode = ZWNJNode.importJSON({text: ''});
+        $isZWNJNode(zwnjNode).should.be.true();
+        zwnjNode.getTextContent().should.equal('');
+    }));
 });

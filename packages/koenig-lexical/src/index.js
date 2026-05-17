@@ -26,6 +26,7 @@ import ImagePlugin from './plugins/ImagePlugin';
 import KoenigBehaviourPlugin from './plugins/KoenigBehaviourPlugin';
 import MarkdownPlugin from './plugins/MarkdownPlugin';
 import MarkdownShortcutPlugin from './plugins/MarkdownShortcutPlugin';
+import MultiColumnPlugin from './plugins/MultiColumnPlugin';
 import PlusCardMenuPlugin from './plugins/PlusCardMenuPlugin';
 import RestrictContentPlugin from './plugins/RestrictContentPlugin';
 import SignupPlugin from './plugins/SignupPlugin';
@@ -41,6 +42,8 @@ import AllDefaultPlugins from './plugins/AllDefaultPlugins';
 import BASIC_NODES from './nodes/BasicNodes';
 import DEFAULT_NODES from './nodes/DefaultNodes';
 import MINIMAL_NODES from './nodes/MinimalNodes';
+import {INSERT_MULTI_COLUMN_COMMAND} from './nodes/MultiColumnNode';
+import {INSERT_VIDEO_COMMAND} from './nodes/VideoNode';
 
 /* Transformers */
 import {
@@ -83,6 +86,7 @@ export {
     KoenigBehaviourPlugin,
     MarkdownPlugin,
     MarkdownShortcutPlugin,
+    MultiColumnPlugin,
     PlusCardMenuPlugin,
     RestrictContentPlugin,
     SignupPlugin,
@@ -97,6 +101,8 @@ export {
     DEFAULT_NODES,
     BASIC_NODES,
     MINIMAL_NODES,
+    INSERT_VIDEO_COMMAND,
+    INSERT_MULTI_COLUMN_COMMAND,
 
     ELEMENT_TRANSFORMERS,
     HR_TRANSFORMER,

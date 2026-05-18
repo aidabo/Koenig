@@ -37,6 +37,8 @@ import {MarkdownNode} from './MarkdownNode';
 import {PaywallNode} from './PaywallNode';
 import {ProductNode} from './ProductNode';
 import {SignupNode} from './SignupNode';
+import {TableCellNode, TableRowNode} from '@lexical/table';
+import {TableNode} from './TableNode';
 import {ToggleNode} from './ToggleNode';
 import {VideoNode} from './VideoNode';
 
@@ -57,6 +59,9 @@ const DEFAULT_NODES = [
     HorizontalRuleNode,
     ImageNode,
     MarkdownNode,
+    TableNode,
+    TableRowNode,
+    TableCellNode,
     AudioNode,
     VideoNode,
     CalloutNode,

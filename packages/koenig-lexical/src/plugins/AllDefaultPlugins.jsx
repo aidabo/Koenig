@@ -8,6 +8,7 @@ import ImagePlugin from '../plugins/ImagePlugin';
 import KoenigSelectorPlugin from './KoenigSelectorPlugin.jsx';
 import MarkdownPlugin from '../plugins/MarkdownPlugin';
 import React from 'react';
+import TableResizeHoverPlugin from './TableResizeHoverPlugin';
 import {AudioPlugin} from '../plugins/AudioPlugin';
 import {BookmarkPlugin} from '../plugins/BookmarkPlugin';
 import {ButtonPlugin} from '../plugins/ButtonPlugin';
@@ -26,6 +27,7 @@ import {MultiColumnPlugin} from '../plugins/MultiColumnPlugin';
 import {PaywallPlugin} from '../plugins/PaywallPlugin';
 import {ProductPlugin} from '../plugins/ProductPlugin';
 import {SignupPlugin} from '../plugins/SignupPlugin';
+import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
 import {TogglePlugin} from '../plugins/TogglePlugin';
 import {VideoPlugin} from '../plugins/VideoPlugin';
 // eslint-disable-next-line no-unused-vars
@@ -67,6 +69,8 @@ export const AllDefaultPlugins = () => {
             <EmbedPlugin />
             <SignupPlugin />
             <CollectionPlugin />
+            <TablePlugin />
+            <TableResizeHoverPlugin />
             <MultiColumnPlugin />
             <CallToActionPlugin />
             

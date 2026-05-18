@@ -10,6 +10,17 @@ const defaultTheme = {
     },
     quote: undefined,
     aside: undefined,
+    table: 'kg-table',
+    tableCell: 'kg-table-cell',
+    tableCellHeader: 'kg-table-cell-header',
+    tableCellSelected: 'kg-table-cell-selected',
+    tableCellEditing: 'kg-table-cell-editing',
+    tableCellActionButton: 'kg-table-cell-action-button',
+    tableCellActionButtonContainer: 'kg-table-cell-action-button-container',
+    tableAddColumns: 'kg-table-add-columns',
+    tableAddRows: 'kg-table-add-rows',
+    tableResizeRuler: 'kg-table-resize-ruler',
+    tableRow: 'kg-table-row',
     list: {
         nested: {
             listitem: '!list-none'

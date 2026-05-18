@@ -1,10 +1,53 @@
 # Current task
 
-- [in_progress] Add native Lexical table support to Koenig with a minimal insert + floating action UI and semantic HTML round-trip.
+- [in_progress] Add a hover-only table column resize handle so users can discover column boundaries before drag support is added.
+  - working folder: `packages/koenig-lexical`
+  - scope: show a Word-like column boundary hover indicator only; do not wire drag resizing yet
+  - targets: `packages/koenig-lexical/src/styles/components/koenig-lexical.css`, a new table hover plugin/helper, and a small regression test for the hover-visibility math
+  - expected support: when the pointer approaches a cell boundary, Koenig shows a resize handle without changing selection, table layout, or existing icon actions
+  - verified: helper unit tests passed, `@tryghost/koenig-lexical` lint passed with existing demo warnings only, and `@tryghost/koenig-lexical` build passed; browser visual confirmation still pending
+
+- [done] Add low-risk table width support: keep tables block-level, normalize table width CSS, and add minimal per-column widen/narrow controls instead of float layout.
+  - working folder: `packages/koenig-lexical`
+  - scope: implement the safe A/B path only; do not add float left/right or image-like card width presets
+  - targets: `packages/koenig-lexical/src/styles/components/koenig-lexical.css`, `packages/koenig-lexical/src/components/ui/TableActionToolbar.jsx`, `packages/koenig-lexical/src/components/ui/ToolbarMenu.jsx`, `packages/koenig-lexical/src/components/ui/FloatingFormatToolbar.jsx`, and a regression unit test for column width adjustment
+  - expected support: table remains a normal block element, and users can widen or narrow the currently selected column without changing the overall table to a float layout
+  - verified: targeted unit test passed, `@tryghost/koenig-lexical` lint passed with existing demo warnings only, `@tryghost/koenig-lexical` build passed, and `@tryghost/kg-default-nodes` lint passed
+  - follow-up mobile tweak: on narrow screens the table now keeps its natural width so horizontal overflow/scroll can happen instead of forcing 100% width
+  - follow-up mobile tweak 2: the table element itself now carries the mobile overflow behavior so the width override is paired with an actual scroll container
+  - follow-up mobile tweak 3: mobile table cells now keep `nowrap` so the table can actually overflow instead of shrinking back to fit the viewport
+  - follow-up revert: the mobile-only table CSS was removed again after it proved ineffective in this layout, leaving desktop table styling intact
+- [todo] Revisit mobile-only table horizontal scroll CSS only if a later layout change makes it effective.
+  - working folder: `packages/koenig-lexical`
+  - scope: keep the current desktop table styling as-is; do not reintroduce mobile overrides until there is a confirmed scroll container and overflow chain that actually works in the real editor layout
+  - current status: previous mobile overrides for table width/overflow were removed because they had no visible effect in this layout
+
+- [done] Polish the table floating toolbar so its icons match the action direction and text selection inside a table cell shows the normal formatting toolbar.
+  - working folder: `packages/koenig-lexical`
+  - scope: keep existing table insert/delete actions intact, but make the icons more semantically aligned and let normal text styling controls appear when a user selects text within a cell
+  - targets: `packages/koenig-lexical/src/components/ui/ToolbarMenu.jsx`, `packages/koenig-lexical/src/components/ui/TableActionToolbar.jsx`, `packages/koenig-lexical/src/plugins/FloatingToolbarPlugin.jsx`, and a regression test in `packages/koenig-lexical/test/e2e/floating-toolbar.test.js`
+  - expected support: row/column table actions remain available, while selecting text in a table cell surfaces the standard bold/italic/heading toolbar instead of the table action menu
+  - verified: unit test for toolbar routing passed, package lint passed, package build passed, and publish/yalc sync refreshed the host app and Ghost core
+  - not-tested: browser e2e selection regression was replaced with a direct unit guard because the table-insertion demo path was not stable enough for a reliable browser assertion in this environment
+  - follow-up fix 6: table-cell text selection now routes by collapsed-vs-range state instead of `getTextContent()` heuristics, so the normal text floating toolbar should win whenever the user actively selects text in a cell
+- [done] Make table deletion clearer and restore delete-key removal of whole-table selections.
+  - working folder: `packages/koenig-lexical`
+  - scope: add more distinguishable delete-row/delete-column icons and make Backspace/Delete remove a fully selected table without affecting normal cell text deletion
+  - targets: `packages/koenig-lexical/src/components/ui/ToolbarMenu.jsx`, `packages/koenig-lexical/src/components/ui/TableActionToolbar.jsx`, `packages/koenig-lexical/src/plugins/KoenigBehaviourPlugin.jsx`, and a regression unit test for whole-table selection deletion
+  - verified: targeted unit tests passed, package lint passed, package build passed, and publish/yalc sync refreshed the host app and Ghost core
+
+- [done] Add native Lexical table support to Koenig with a minimal insert + floating action UI and semantic HTML round-trip.
   - working folder: `packages/koenig-lexical`
   - scope: keep the existing Ghost/Koenig save pipeline, but add table nodes, editor insertion affordances, and a contextual floating table menu so general users can insert and edit tables without Markdown
   - component targets: `packages/koenig-lexical/src/nodes/DefaultNodes.js`, `packages/koenig-lexical/src/index.js`, `packages/koenig-lexical/src/plugins/AllDefaultPlugins.jsx`, `packages/koenig-lexical/src/components/ui/FloatingToolbar.jsx`, `packages/koenig-lexical/src/components/ui/FormatToolbar.jsx`, and a new table plugin/menu module plus regression tests
   - expected support: the editor can insert a default table, edit cells, add/remove rows and columns from a contextual menu, and save/render as normal HTML tables for Ghost
+  - verified: package build, targeted unit test, and package lint
+  - verified read side: preview/view/link article now render tables through kg-lexical-html-renderer
+  - follow-up fix: `kg-default-nodes` now registers `TableNode`, `TableRowNode`, and `TableCellNode` so read-side lexical parsing keeps surrounding text/media intact instead of blanking the whole article
+  - follow-up fix 2: `TableNode.exportDOM()` now emits a real `<table>` wrapper so editor-side HTML export no longer serializes tables as bare `<tr>` fragments
+  - follow-up fix 3: `HtmlNode.importDOM()` no longer intercepts raw `<table>` elements, so HTML-to-Lexical conversion now prefers the table node path instead of converting plain tables into html cards
+  - follow-up fix 4: Ghost core now points `@tryghost/kg-html-to-lexical` at the local `.yalc` package, so the runtime resolves the updated table import order instead of the stale npm-installed build
+  - follow-up fix 5: root `pub` now publishes `kg-html-to-lexical` too via a helper script, so Ghost/host can refresh the updated table import path with one short command
 - [done] Reorder Koenig slash and plus card menus so image, video, markdown, gallery, and file appear first
   - [done] Update card priorities in Koenig node definitions to make slash and plus menus consistent
   - [done] Add a regression test for the new menu ordering in `buildCardMenu`

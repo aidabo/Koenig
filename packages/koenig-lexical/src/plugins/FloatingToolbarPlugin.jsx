@@ -1,7 +1,9 @@
 import React from 'react';
+import {$findMatchingParent} from '@lexical/utils';
 import {$getSelection, $isParagraphNode, $isRangeSelection, $isTextNode, COMMAND_PRIORITY_LOW, KEY_MODIFIER_COMMAND} from 'lexical';
 import {$isAtLinkSearchNode} from '@tryghost/kg-default-nodes';
 import {$isLinkNode} from '@lexical/link';
+import {$isTableCellNode, $isTableSelection, TableCellNode, TableNode, TableRowNode} from '@lexical/table';
 import {FloatingFormatToolbar, toolbarItemTypes} from '../components/ui/FloatingFormatToolbar';
 import {FloatingLinkToolbar} from '../components/ui/FloatingLinkToolbar';
 import {getSelectedNode} from '../utils/getSelectedNode';
@@ -12,13 +14,36 @@ export default function FloatingToolbarPlugin({anchorElem = document.body, isSni
     return useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenFormats);
 }
 
+export function getToolbarItemTypeFromSelectionState({
+    hasRangeSelection,
+    isAtLinkSearchNode,
+    isTableSelection,
+    hasSelectedTableCell,
+    isCollapsed,
+    canShowTextToolbar
+}) {
+    if (!hasRangeSelection || isAtLinkSearchNode) {
+        return null;
+    }
+
+    if (isTableSelection || (hasSelectedTableCell && isCollapsed)) {
+        return toolbarItemTypes.table;
+    }
+
+    if (!isCollapsed && canShowTextToolbar) {
+        return toolbarItemTypes.text;
+    }
+
+    return null;
+}
+
 function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenFormats = []) {
     const [toolbarItemType, setToolbarItemType] = React.useState(null);
     const [href, setHref] = React.useState(null);
+    const [tableTargetElem, setTableTargetElem] = React.useState(null);
 
     const setToolbarType = React.useCallback(() => {
         editor.getEditorState().read(() => {
-            // Should not to pop up the floating toolbar when using IME input
             if (editor.isComposing()) {
                 return;
             }
@@ -27,7 +52,6 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
             const nativeSelection = window.getSelection();
             const rootElement = editor.getRootElement();
 
-            // close toolbar if selection was outside of editor
             if (
                 nativeSelection !== null &&
                 (
@@ -37,13 +61,37 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                 )
             ) {
                 setToolbarItemType(null);
+                setTableTargetElem(null);
                 return;
+            }
+
+            if (editor.hasNodes([TableNode, TableRowNode, TableCellNode])) {
+                const tableCellNode = getSelectedTableCellNode(selection);
+                const isTableSelection = $isTableSelection(selection);
+                const toolbarType = getToolbarItemTypeFromSelectionState({
+                    hasRangeSelection: true,
+                    isAtLinkSearchNode: false,
+                    isTableSelection,
+                    hasSelectedTableCell: !!tableCellNode,
+                    isCollapsed: selection.isCollapsed(),
+                    canShowTextToolbar: false
+                });
+
+                if (toolbarType === toolbarItemTypes.table) {
+                    const tableNode = tableCellNode ? $getTableNodeFromSelectionNode(tableCellNode) : null;
+                    const tableElement = tableNode ? editor.getElementByKey(tableNode.getKey()) : null;
+                    setHref('');
+                    setTableTargetElem(tableElement);
+                    setToolbarItemType(toolbarItemTypes.table);
+                    return;
+                }
             }
 
             if (!$isRangeSelection(selection) || $isAtLinkSearchNode(selection.anchor.getNode())) {
                 if (toolbarItemType) {
                     setToolbarItemType(null);
                 }
+                setTableTargetElem(null);
                 return;
             }
 
@@ -58,33 +106,39 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                 setHref('');
             }
 
-            if (selection.getTextContent().trim() !== '' && ($isTextNode(anchorNode) || $isParagraphNode(anchorNode))) {
+            const canShowTextToolbar = $isTextNode(anchorNode) || $isParagraphNode(anchorNode) || !!$findMatchingParent(anchorNode, $isTableCellNode);
+            const toolbarType = getToolbarItemTypeFromSelectionState({
+                hasRangeSelection: true,
+                isAtLinkSearchNode: false,
+                isTableSelection: false,
+                hasSelectedTableCell: false,
+                isCollapsed: selection.isCollapsed(),
+                canShowTextToolbar
+            });
+
+            if (toolbarType === toolbarItemTypes.text) {
                 setToolbarItemType(toolbarItemTypes.text);
+                setTableTargetElem(null);
                 return;
             }
 
             setToolbarItemType(null);
+            setTableTargetElem(null);
         });
     }, [editor, toolbarItemType]);
 
     React.useEffect(() => {
-        // Add a listener if the text toolbar is active. It helps to prevent events bubbling
-        // when a user is interacting with inputs in the link/snippets toolbar
-        if (!!toolbarItemType && toolbarItemType !== toolbarItemTypes.text) {
-            return;
-        }
         document.addEventListener('selectionchange', setToolbarType);
         return () => {
             document.removeEventListener('selectionchange', setToolbarType);
         };
-    }, [setToolbarType, toolbarItemType]);
+    }, [setToolbarType]);
 
     React.useEffect(() => {
         editor.registerCommand(
             KEY_MODIFIER_COMMAND,
             (event) => {
                 const {keyCode, ctrlKey, metaKey, shiftKey} = event;
-                // ctrl/cmd K with selected text should prompt for link insertion
                 if (!shiftKey && keyCode === 75 && (ctrlKey || metaKey)) {
                     const selection = $getSelection();
                     if ($isRangeSelection(selection) && !selection.isCollapsed()) {
@@ -99,12 +153,11 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
         );
     }, [editor]);
 
-    // use native mousedown event so the toolbar can close when something is
-    // clicked outside of the editor and the selection is lost
     React.useEffect(() => {
         const handleMousedown = (event) => {
             if (!anchorElem.contains(event.target)) {
                 setToolbarItemType(null);
+                setTableTargetElem(null);
             }
         };
 
@@ -129,14 +182,53 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                 href={href}
                 isSnippetsEnabled={isSnippetsEnabled}
                 setToolbarItemType={setToolbarItemType}
+                targetElem={tableTargetElem}
                 toolbarItemType={toolbarItemType}
             />
 
             <FloatingLinkToolbar
                 anchorElem={anchorElem}
-                disabled={!!toolbarItemType} // don't show link toolbar on hover when format toolbar is active
+                disabled={!!toolbarItemType}
                 onEditLink={handleLinkEdit}
             />
         </>
     );
+}
+
+function getSelectedTableCellNode(selection) {
+    if (!$isRangeSelection(selection)) {
+        return null;
+    }
+
+    if ($isTableSelection(selection)) {
+        const tableCells = selection.getNodes().filter($isTableCellNode);
+        if (tableCells.length > 0) {
+            return tableCells[0];
+        }
+    }
+
+    const anchorCell = $findMatchingParent(selection.anchor.getNode(), $isTableCellNode);
+    if ($isTableCellNode(anchorCell)) {
+        return anchorCell;
+    }
+
+    const focusCell = $findMatchingParent(selection.focus.getNode(), $isTableCellNode);
+    if ($isTableCellNode(focusCell)) {
+        return focusCell;
+    }
+
+    return null;
+}
+
+function $getTableNodeFromSelectionNode(node) {
+    if (!node) {
+        return null;
+    }
+
+    let parent = node;
+    while (parent && parent.getType?.() !== 'table') {
+        parent = parent.getParent?.();
+    }
+
+    return parent && parent.getType?.() === 'table' ? parent : null;
 }

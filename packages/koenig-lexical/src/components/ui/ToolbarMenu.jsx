@@ -1,6 +1,8 @@
 import AddIcon from '../../assets/icons/kg-add.svg?react';
+import ArrowDownIcon from '../../assets/icons/kg-arrow-down.svg?react';
 import BoldIcon from '../../assets/icons/kg-bold.svg?react';
 import EditIcon from '../../assets/icons/kg-edit.svg?react';
+import ExpandIcon from '../../assets/icons/kg-expand.svg?react';
 import EyeIcon from '../../assets/icons/kg-eye.svg?react';
 import HeadingThreeIcon from '../../assets/icons/kg-heading-3.svg?react';
 import HeadingTwoIcon from '../../assets/icons/kg-heading-2.svg?react';
@@ -16,7 +18,10 @@ import LinkIcon from '../../assets/icons/kg-link.svg?react';
 import QuoteIcon from '../../assets/icons/kg-quote.svg?react';
 import QuoteOneIcon from '../../assets/icons/kg-quote-1.svg?react';
 import QuoteTwoIcon from '../../assets/icons/kg-quote-2.svg?react';
+import ShrinkIcon from '../../assets/icons/kg-shrink.svg?react';
 import SnippetIcon from '../../assets/icons/kg-snippet.svg?react';
+import TableColumnDeleteIcon from '../../assets/icons/kg-table-column-delete.svg?react';
+import TableRowDeleteIcon from '../../assets/icons/kg-table-row-delete.svg?react';
 import TrashIcon from '../../assets/icons/kg-trash.svg?react';
 import WandIcon from '../../assets/icons/kg-wand.svg?react';
 import {Tooltip} from './Tooltip';
@@ -38,6 +43,11 @@ export const TOOLBAR_ICONS = {
     imgRight: ImgRightIcon,
     imgJustify: ImgJustifyIcon,
     add: AddIcon,
+    arrowDown: ArrowDownIcon,
+    tableDeleteColumn: TableColumnDeleteIcon,
+    tableDeleteRow: TableRowDeleteIcon,
+    tableWidenColumn: ExpandIcon,
+    tableNarrowColumn: ShrinkIcon,
     edit: EditIcon,
     wand: WandIcon,
     visibility: EyeIcon,
@@ -57,7 +67,7 @@ export function ToolbarMenu({children, hide, ...props}) {
     );
 }
 
-export function ToolbarMenuItem({label, isActive, onClick, icon, shortcutKeys, secondary, dataTestId, hide, ...props}) {
+export function ToolbarMenuItem({label, isActive, onClick, icon, iconClassName = '', shortcutKeys, secondary, dataTestId, hide, ...props}) {
     if (hide) {
         return null;
     }
@@ -74,7 +84,7 @@ export function ToolbarMenuItem({label, isActive, onClick, icon, shortcutKeys, s
                 type="button"
                 onClick={onClick}
             >
-                <Icon className={`size-4 overflow-visible transition ${secondary ? 'stroke-2' : 'stroke-[2.5]'} ${isActive ? 'text-green-600 dark:text-green-600' : 'text-black dark:text-white'}`} />
+                <Icon className={`size-4 overflow-visible transition ${secondary ? 'stroke-2' : 'stroke-[2.5]'} ${isActive ? 'text-green-600 dark:text-green-600' : 'text-black dark:text-white'} ${iconClassName}`} />
             </button>
             <Tooltip label={label} shortcutKeys={shortcutKeys} />
         </li>

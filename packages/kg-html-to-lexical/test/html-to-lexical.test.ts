@@ -91,6 +91,17 @@ describe('HTMLtoLexical', function () {
             });
         });
 
+        it('keeps plain html tables as table nodes instead of html cards', function () {
+            const lexical = converter.htmlToLexical('<p>Before</p><table><tr><td>Cell A</td><td>Cell B</td></tr></table><p>After</p>', editorConfig) as any;
+
+            assert.equal(lexical.root.children[0].type, 'paragraph');
+            assert.equal(lexical.root.children[1].type, 'table');
+            assert.equal(lexical.root.children[2].type, 'paragraph');
+            assert.equal(lexical.root.children[1].children[0].type, 'tablerow');
+            assert.equal(lexical.root.children[1].children[0].children[0].type, 'tablecell');
+            assert.equal(lexical.root.children[1].children[0].children[0].children[0].children[0].text, 'Cell A');
+        });
+
         it('can convert <p>Hello</p><p>World</p>', function () {
             const lexical = converter.htmlToLexical('<p>Hello</p><p>World</p>', editorConfig);
 

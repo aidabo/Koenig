@@ -170,6 +170,43 @@ em-emoji-picker {
     border-bottom: 1px solid var(--grey-200);
 }
 
+.koenig-lexical .kg-table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+}
+
+.koenig-lexical .kg-table-cell,
+.koenig-lexical .kg-table-cell-header {
+    border: 1px solid var(--grey-200);
+    padding: 0.5rem 0.75rem;
+}
+
+.koenig-lexical .kg-table-cell-selected,
+.koenig-lexical .kg-table-cell-editing {
+    background-color: rgba(59, 130, 246, 0.08);
+}
+
+.koenig-lexical .kg-table-cell-action-button-container,
+.koenig-lexical .kg-table-add-columns,
+.koenig-lexical .kg-table-add-rows {
+    display: none;
+}
+
+.koenig-lexical .kg-table-resize-ruler {
+    position: fixed;
+    z-index: 40;
+    width: 10px;
+    background: transparent;
+    border-left: 2px solid var(--green);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5);
+    cursor: col-resize;
+    pointer-events: none;
+    border-radius: 9999px;
+    opacity: 0.85;
+    box-sizing: border-box;
+}
+
 .koenig-lexical > .dark, .koenig-lexical.dark, .dark .koenig-lexical {
     table tr td,
     table tr th {

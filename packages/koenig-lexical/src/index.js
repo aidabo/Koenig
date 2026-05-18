@@ -35,6 +35,8 @@ import TKCountPlugin from './plugins/TKCountPlugin';
 import TogglePlugin from './plugins/TogglePlugin';
 import VideoPlugin from './plugins/VideoPlugin';
 import WordCountPlugin from './plugins/WordCountPlugin';
+import {INSERT_TABLE_COMMAND, TableNode} from './nodes/TableNode';
+import {TablePlugin} from '@lexical/react/LexicalTablePlugin';
 
 import AllDefaultPlugins from './plugins/AllDefaultPlugins';
 
@@ -87,12 +89,14 @@ export {
     MarkdownPlugin,
     MarkdownShortcutPlugin,
     MultiColumnPlugin,
+    TablePlugin,
     PlusCardMenuPlugin,
     RestrictContentPlugin,
     SignupPlugin,
     SlashCardMenuPlugin,
     TKCountPlugin,
     TogglePlugin,
+    TableNode,
     VideoPlugin,
     WordCountPlugin,
 
@@ -110,7 +114,8 @@ export {
 
     DEFAULT_TRANSFORMERS,
     BASIC_TRANSFORMERS,
-    MINIMAL_TRANSFORMERS
+    MINIMAL_TRANSFORMERS,
+    INSERT_TABLE_COMMAND
 };
 
 // eslint-disable-next-line no-undef

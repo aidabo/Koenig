@@ -60,6 +60,11 @@ describe('Special elements', function () {
         output: `<p>Test<br><br><a href="https://ghost.org">a link</a> some text</p>`
     }));
 
+    it('tables', shouldRender({
+        input: `{"root":{"children":[{"children":[{"children":[{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Cell A","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1},{"children":[{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Cell B","type":"text","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":null,"format":"","indent":0,"type":"tablecell","version":1}],"direction":null,"format":"","indent":0,"type":"tablerow","version":1}],"direction":null,"format":"","indent":0,"type":"table","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
+        output: '<table><tbody><tr><td><p>Cell A</p></td><td><p>Cell B</p></td></tr></tbody></table>'
+    }));
+
     it('linebreaks after multiple formats', shouldRender ({
         input: `{"root":{"children":[{"children":[{"detail":0,"format":3,"mode":"normal","style":"","text":"Test","type":"text","version":1},{"detail":0,"format":0,"mode":"normal","style":"","text":" test","type":"text","version":1},{"type":"linebreak","version":1}],"direction":"ltr","format":"","indent":0,"type":"paragraph","version":1}],"direction":"ltr","format":"","indent":0,"type":"root","version":1}}`,
         output: `<p><strong><em>Test</em></strong> test<br></p>`

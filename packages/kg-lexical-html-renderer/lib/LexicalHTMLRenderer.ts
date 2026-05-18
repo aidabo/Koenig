@@ -3,6 +3,7 @@ import {createHeadlessEditor} from '@lexical/headless';
 import {ListItemNode, ListNode} from '@lexical/list';
 import {HeadingNode, QuoteNode} from '@lexical/rich-text';
 import {LinkNode} from '@lexical/link';
+import {TableCellNode, TableNode, TableRowNode} from '@lexical/table';
 import $convertToHtmlString from './convert-to-html-string';
 import getDynamicDataNodes from './get-dynamic-data-nodes';
 
@@ -55,6 +56,9 @@ export default class LexicalHTMLRenderer {
             ListItemNode,
             QuoteNode,
             LinkNode,
+            TableNode,
+            TableRowNode,
+            TableCellNode,
             ...this.nodes
         ];
 

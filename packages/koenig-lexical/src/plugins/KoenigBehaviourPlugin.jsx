@@ -42,6 +42,7 @@ import {
     PASTE_COMMAND,
     createCommand
 } from 'lexical';
+import {$getTableNodeFromLexicalNodeOrThrow, $isTableCellNode, $isTableSelection} from '@lexical/table';
 import {$insertAndSelectNode} from '../utils/$insertAndSelectNode';
 import {
     $isAtStartOfDocument,
@@ -115,6 +116,39 @@ function $removeOrReplaceNodeWithParagraph(editor, node) {
     node.remove();
 }
 
+export function getWholeSelectedTableNode(selection) {
+    if (!$isTableSelection(selection)) {
+        return null;
+    }
+
+    const tableCells = selection.getNodes().filter($isTableCellNode);
+    if (tableCells.length === 0) {
+        return null;
+    }
+
+    const tableNode = $getTableNodeFromLexicalNodeOrThrow(tableCells[0]);
+    const totalCellCount = tableNode.getChildren().reduce((count, row) => {
+        return count + row.getChildrenSize();
+    }, 0);
+
+    return tableCells.length === totalCellCount ? tableNode : null;
+}
+
+function removeSelectedTable(editor, tableNode) {
+    editor.update(() => {
+        const root = $getRoot();
+        if (root.getChildrenSize() <= 1) {
+            const paragraph = $createParagraphNode();
+            root.append(paragraph);
+            paragraph.select();
+        } else {
+            tableNode.selectPrevious();
+        }
+
+        tableNode.remove();
+    }, {tag: 'history-merge'});
+}
+
 function useKoenigBehaviour({editor, containerElem, cursorDidExitAtTop, isNested}) {
     const {
         selectedCardKey,
@@ -142,6 +176,38 @@ function useKoenigBehaviour({editor, containerElem, cursorDidExitAtTop, isNested
             document.removeEventListener('keyup', keyUp);
         };
     }, []);
+
+    React.useEffect(() => {
+        const handleTableDelete = (event) => {
+            if (event.key !== 'Backspace' && event.key !== 'Delete') {
+                return;
+            }
+
+            if (document.activeElement !== editor.getRootElement()) {
+                return;
+            }
+
+            let selectedTableNode = null;
+            editor.getEditorState().read(() => {
+                const selection = $getSelection();
+                selectedTableNode = getWholeSelectedTableNode(selection);
+            });
+
+            if (!selectedTableNode) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+            removeSelectedTable(editor, selectedTableNode);
+        };
+
+        document.addEventListener('keydown', handleTableDelete, {capture: true});
+
+        return () => {
+            document.removeEventListener('keydown', handleTableDelete, {capture: true});
+        };
+    }, [editor]);
 
     // deselect cards on mousedown outside of the editor container
     React.useEffect(() => {

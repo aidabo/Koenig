@@ -21,7 +21,7 @@
     "fix": "yarn cache clean && rm -rf node_modules && yarn",
     "ship": "IS_SHIPPING=true lerna publish --git-remote ${GHOST_UPSTREAM:-origin}",
     "main": "git checkout main && git pull ${GHOST_UPSTREAM:-origin} main && yarn",
-    "pub": "bash -c 'cd ~/work/legacy/03-koenig/packages/koenig-lexical && yalc publish &&  cd ~/work/legacy/03-koenig/packages/kg-default-nodes && yalc publish && cd ~/work/legacy/01-jibunsee-react/apps/host/ && yalc update && cd ~/work/legacy/00-Ghost-5.116.2/ghost/core && yalc update && cd ~/work/legacy/03-koenig'"
+    "pub": "bash scripts/publish-yalc.sh"
   },
   "devDependencies": {
     "eslint": "8.57.0",

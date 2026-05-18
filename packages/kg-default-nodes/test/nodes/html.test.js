@@ -349,24 +349,6 @@ describe('HtmlNode', function () {
             nodes.length.should.equal(1);
             nodes[0].should.be.instanceof(HtmlNode);
         }));
-
-        it('parses html table', editorTest(function () {
-            const document = createDocument(html`
-                <table style="float:right"><tr><th>Month</th><th>Savings</th></tr><tr><td>January</td><td>$100</td></tr><tr><td>February</td><td>$80</td></tr></table>
-            `);
-            const nodes = $generateNodesFromDOM(editor, document);
-            nodes.length.should.equal(1);
-            nodes[0].should.be.instanceof(HtmlNode);
-        }));
-
-        it('parses table nested in another table', editorTest(function () {
-            const document = createDocument(html`
-                <table id="table1"><tr><th>title1</th><th>title2</th><th>title3</th></tr><tr><td id="nested"><table id="table2"><tr><td>cell1</td><td>cell2</td><td>cell3</td></tr></table></td><td>cell2</td><td>cell3</td></tr><tr><td>cell4</td><td>cell5</td><td>cell6</td></tr></table>
-            `);
-            const nodes = $generateNodesFromDOM(editor, document);
-            nodes.length.should.equal(1);
-            nodes[0].should.be.instanceof(HtmlNode);
-        }));
     });
 
     describe('exportJSON', function () {

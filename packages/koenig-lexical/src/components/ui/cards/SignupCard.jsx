@@ -21,6 +21,7 @@ import {ReadOnlyOverlay} from '../ReadOnlyOverlay';
 import {SubscribeForm} from '../SubscribeForm';
 import {Tooltip} from '../Tooltip';
 import {getAccentColor} from '../../../utils/getAccentColor';
+import {getColorPickerSwatches} from '../colorSwatches';
 import {isEditorEmpty} from '../../../utils/isEditorEmpty';
 
 export function SignupCard({alignment,
@@ -422,9 +423,7 @@ export function SignupCard({alignment,
                                     </button>
                                 )
                             }),
-                            {title: 'Grey', hex: '#F0F0F0'},
-                            {title: 'Black', hex: '#000000'},
-                            {title: 'Brand color', accent: true}
+                            ...getColorPickerSwatches({includeTransparent: false})
                         ].filter(Boolean)}
                         value={(showBackgroundImage && layout !== 'split') ? '' : backgroundColor}
                         onPickerChange={color => handleBackgroundColor(color, matchingTextColor(color))}
@@ -481,11 +480,7 @@ export function SignupCard({alignment,
                         eyedropper={layout === 'split'}
                         isExpanded={buttonColorPickerExpanded}
                         label='Button color'
-                        swatches={[
-                            {title: 'White', hex: '#ffffff'},
-                            {title: 'Black', hex: '#000000'},
-                            {title: 'Brand color', accent: true}
-                        ]}
+                        swatches={getColorPickerSwatches({includeTransparent: false})}
                         value={buttonColor}
                         onPickerChange={color => handleButtonColor(color, matchingTextColor(color))}
                         onSwatchChange={(color) => {

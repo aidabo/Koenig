@@ -1,5 +1,6 @@
 import React from 'react';
 import {ColorPicker} from './ColorPicker';
+import {getColorPickerSwatches} from './colorSwatches';
 
 const story = {
     title: 'Generic/Color picker',
@@ -25,9 +26,5 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-    swatches: [
-        {title: 'Brand color', accent: true},
-        {title: 'Black', hex: '#000000'},
-        {title: 'Transparent', transparent: true}
-    ]
+    swatches: getColorPickerSwatches()
 };

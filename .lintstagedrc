@@ -1,6 +1,6 @@
 {
-  "packages/**/src/**/*.{js,jsx,ts,tsx,cjs}": "eslint",
-  "packages/**/test/**/*.{js,jsx,ts,tsx,cjs}": "eslint",
-  "packages/**/demo/**/*.{js,jsx,ts,tsx,cjs}": "eslint",
-  "packages/**/*.{config,test}.{js,jsx,ts,tsx,cjs}": "eslint"
+  "packages/**/src/**/*.{js,jsx,ts,tsx,cjs}": "eslint --fix",
+  "packages/**/test/**/*.{js,jsx,ts,tsx,cjs}": "eslint --fix",
+  "packages/**/demo/**/*.{js,jsx,ts,tsx,cjs}": "eslint --fix",
+  "packages/**/*.{config,test}.{js,jsx,ts,tsx,cjs}": "eslint --fix"
 }

@@ -41,6 +41,7 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
     const [toolbarItemType, setToolbarItemType] = React.useState(null);
     const [href, setHref] = React.useState(null);
     const [tableTargetElem, setTableTargetElem] = React.useState(null);
+    const [isTextColorPanelOpen, setIsTextColorPanelOpen] = React.useState(false);
 
     const setToolbarType = React.useCallback(() => {
         editor.getEditorState().read(() => {
@@ -52,6 +53,8 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
             const nativeSelection = window.getSelection();
             const rootElement = editor.getRootElement();
 
+            const preserveTextToolbar = isTextColorPanelOpen && toolbarItemType === toolbarItemTypes.text;
+
             if (
                 nativeSelection !== null &&
                 (
@@ -60,8 +63,11 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                     !rootElement.contains(nativeSelection.anchorNode)
                 )
             ) {
-                setToolbarItemType(null);
-                setTableTargetElem(null);
+                if (!preserveTextToolbar) {
+                    setToolbarItemType(null);
+                    setTableTargetElem(null);
+                    setIsTextColorPanelOpen(false);
+                }
                 return;
             }
 
@@ -83,15 +89,19 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                     setHref('');
                     setTableTargetElem(tableElement);
                     setToolbarItemType(toolbarItemTypes.table);
+                    setIsTextColorPanelOpen(false);
                     return;
                 }
             }
 
             if (!$isRangeSelection(selection) || $isAtLinkSearchNode(selection.anchor.getNode())) {
-                if (toolbarItemType) {
-                    setToolbarItemType(null);
+                if (!preserveTextToolbar) {
+                    if (toolbarItemType) {
+                        setToolbarItemType(null);
+                    }
+                    setTableTargetElem(null);
+                    setIsTextColorPanelOpen(false);
                 }
-                setTableTargetElem(null);
                 return;
             }
 
@@ -122,10 +132,13 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                 return;
             }
 
-            setToolbarItemType(null);
-            setTableTargetElem(null);
+            if (!preserveTextToolbar) {
+                setToolbarItemType(null);
+                setTableTargetElem(null);
+                setIsTextColorPanelOpen(false);
+            }
         });
-    }, [editor, toolbarItemType]);
+    }, [editor, isTextColorPanelOpen, toolbarItemType]);
 
     React.useEffect(() => {
         document.addEventListener('selectionchange', setToolbarType);
@@ -158,6 +171,7 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
             if (!anchorElem.contains(event.target)) {
                 setToolbarItemType(null);
                 setTableTargetElem(null);
+                setIsTextColorPanelOpen(false);
             }
         };
 
@@ -181,6 +195,8 @@ function useFloatingFormatToolbar(editor, anchorElem, isSnippetsEnabled, hiddenF
                 hiddenFormats={hiddenFormats}
                 href={href}
                 isSnippetsEnabled={isSnippetsEnabled}
+                isTextColorPanelOpen={isTextColorPanelOpen}
+                setIsTextColorPanelOpen={setIsTextColorPanelOpen}
                 setToolbarItemType={setToolbarItemType}
                 targetElem={tableTargetElem}
                 toolbarItemType={toolbarItemType}

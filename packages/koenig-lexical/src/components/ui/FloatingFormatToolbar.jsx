@@ -39,6 +39,8 @@ export function FloatingFormatToolbar({
     anchorElem,
     href,
     isSnippetsEnabled,
+    isTextColorPanelOpen,
+    setIsTextColorPanelOpen,
     toolbarItemType,
     setToolbarItemType,
     hiddenFormats = [],
@@ -211,8 +213,11 @@ export function FloatingFormatToolbar({
                         hiddenFormats={hiddenFormats}
                         isLinkSelected={!!href || (isLinkSearchEnabled && isLinkToolbar)}
                         isSnippetsEnabled={isSnippetsEnabled}
+                        isTextColorPanelOpen={isTextColorPanelOpen}
                         onLinkClick={() => setToolbarItemType(toolbarItemTypes.link)}
                         onSnippetClick={() => setToolbarItemType(toolbarItemTypes.snippet)}
+                        onTextColorClose={() => setIsTextColorPanelOpen(false)}
+                        onTextColorToggle={() => setIsTextColorPanelOpen(value => !value)}
                     />
                 )}
 

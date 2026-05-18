@@ -10,6 +10,7 @@ import {ButtonGroupSetting, ColorOptionSetting, ColorPickerSetting, InputSetting
 import {ReadOnlyOverlay} from '../ReadOnlyOverlay';
 import {VisibilitySettings} from '../VisibilitySettings';
 import {getAccentColor} from '../../../utils/getAccentColor';
+import {getColorPickerSwatches} from '../colorSwatches';
 import {textColorForBackgroundColor} from '@tryghost/color-utils';
 
 export const CTA_COLORS = {
@@ -162,11 +163,7 @@ export function CtaCard({
                         eyedropper={true}
                         isExpanded={buttonColorPickerExpanded}
                         label='Button Color'
-                        swatches={[
-                            {title: 'Black', hex: '#000000'},
-                            {title: 'Grey', hex: '#F0F0F0'},
-                            {title: 'Brand color', accent: true}
-                        ]}
+                        swatches={getColorPickerSwatches({includeTransparent: false})}
                         value={buttonColor}
                         onPickerChange={bgColor => handleButtonColor(bgColor, matchingTextColor(bgColor))}
                         onSwatchChange={(bgColor) => {

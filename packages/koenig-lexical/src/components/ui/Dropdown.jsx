@@ -25,7 +25,7 @@ function Item({item, selected, onChange}) {
     );
 }
 
-export function Dropdown({value, menu, onChange, dataTestId}) {
+export function Dropdown({value, menu, onChange, dataTestId, placeholder = ''}) {
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = (event) => {
@@ -60,13 +60,14 @@ export function Dropdown({value, menu, onChange, dataTestId}) {
     };
 
     const selectedItem = menu.find(menuItem => menuItem.name === value);
-    const trigger = selectedItem?.label ?? '';
+    const showPlaceholder = !!placeholder && (!selectedItem || selectedItem.name === 'default');
+    const trigger = showPlaceholder ? placeholder : (selectedItem?.label ?? '');
     const zIndex = open ? 'z-10' : 'z-0';
 
     return (
         <div className={`relative ${zIndex} font-sans text-sm font-normal`} data-testid={dataTestId}>
             <button
-                className="relative h-9 w-full cursor-pointer rounded-lg border border-grey-150 bg-grey-150 px-3 py-1 pr-5 text-left font-sans font-normal leading-[1.5] text-grey-900 hover:border-grey-100 hover:bg-grey-100 focus-visible:outline-none dark:border-grey-900 dark:bg-grey-900 dark:text-white dark:placeholder:text-grey-800 md:h-[38px] md:py-2"
+                className={`relative h-9 w-full cursor-pointer rounded-lg border border-grey-150 bg-grey-150 px-3 py-1 pr-5 text-left font-sans font-normal leading-[1.5] hover:border-grey-100 hover:bg-grey-100 focus-visible:outline-none dark:border-grey-900 dark:bg-grey-900 dark:placeholder:text-grey-800 md:h-[38px] md:py-2 ${showPlaceholder ? 'text-grey-500 dark:text-grey-700' : 'text-grey-900 dark:text-white'}`}
                 data-testid={`${dataTestId}-value`}
                 type="button"
                 onBlur={handleBlur}

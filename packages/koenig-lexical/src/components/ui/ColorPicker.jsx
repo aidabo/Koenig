@@ -149,9 +149,13 @@ export function ColorIndicator({value, swatches, onSwatchChange, onTogglePicker,
         selectedSwatch = null;
     }
 
+    const swatchLayoutClass = swatches.length > 6
+        ? 'grid grid-cols-6 gap-1'
+        : 'flex items-center gap-1';
+
     return (
         <div className='flex gap-1'>
-            <div className={`flex items-center gap-1`}>
+            <div className={swatchLayoutClass}>
                 {swatches.map(({customContent, ...swatch}) => (
                     customContent ? <Fragment key={swatch.title}>{customContent}</Fragment> : <ColorSwatch key={swatch.title} isSelected={selectedSwatch === swatch.title} onSelect={onSwatchChange} {...swatch} />
                 ))}

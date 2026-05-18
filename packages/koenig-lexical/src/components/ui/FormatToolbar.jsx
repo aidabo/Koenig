@@ -1,5 +1,6 @@
 import KoenigComposerContext from '../../context/KoenigComposerContext.jsx';
 import React from 'react';
+import TextColorIcon from '../../assets/icons/kg-text-color.svg?react';
 import {$createAsideNode} from '../../nodes/AsideNode';
 import {
     $createHeadingNode,
@@ -16,6 +17,7 @@ import {
 import {$getNearestNodeOfType} from '@lexical/utils';
 import {$isListNode, ListNode} from '@lexical/list';
 import {$setBlocksType} from '@lexical/selection';
+import {ColorPickerSetting} from './SettingsPanel';
 import {Dropdown} from './Dropdown';
 import {HeadingNode, QuoteNode} from '@lexical/rich-text';
 import {
@@ -24,7 +26,10 @@ import {
     ToolbarMenuSeparator
 } from './ToolbarMenu';
 import {altOrOption, ctrlOrCmdSymbol, ctrlOrSymbol} from '../../utils/shortcutSymbols';
+import {getAccentColor} from '../../utils/getAccentColor';
+import {getColorPickerSwatches} from './colorSwatches';
 import {getSelectedNode} from '../../utils/getSelectedNode';
+import {getStyleProperty, normalizeColorValue, setStyleProperty} from '../../utils/textStyle';
 
 const blockTypeToBlockName = {
     bullet: 'Bulleted List',
@@ -64,13 +69,19 @@ export default function FormatToolbar({
     editor,
     isSnippetsEnabled,
     isLinkSelected,
+    isTextColorPanelOpen,
     onLinkClick,
     onSnippetClick,
+    onTextColorClose,
+    onTextColorToggle,
     hiddenFormats = []
 }) {
     const {cardConfig} = React.useContext(KoenigComposerContext);
     const [isBold, setIsBold] = React.useState(false);
     const [isItalic, setIsItalic] = React.useState(false);
+    const [isSuperscript, setIsSuperscript] = React.useState(false);
+    const [isSubscript, setIsSubscript] = React.useState(false);
+    const [textColor, setTextColor] = React.useState('');
     const [blockType, setBlockType] = React.useState('paragraph');
     const [fontFamily, setFontFamily] = React.useState('default');
 
@@ -96,23 +107,20 @@ export default function FormatToolbar({
 
     const fontFamilies = cardConfig?.fontFamilies?.length ? cardConfig.fontFamilies : DEFAULT_FONT_FAMILIES;
 
-    const setStyleProperty = (styleString, property, value) => {
-        const element = document.createElement('span');
-        element.style.cssText = styleString || '';
-
-        if (value) {
-            element.style.setProperty(property, value);
-        } else {
-            element.style.removeProperty(property);
-        }
-
-        return element.getAttribute('style') || '';
+    const getFontFamilyValue = (styleString = '') => {
+        return getStyleProperty(styleString, 'font-family');
     };
 
-    const getFontFamilyValue = (styleString = '') => {
-        const element = document.createElement('span');
-        element.style.cssText = styleString || '';
-        return element.style.fontFamily || '';
+    const getTextColorValue = (styleString = '') => {
+        const currentColor = getStyleProperty(styleString, 'color');
+        if (!currentColor) {
+            return '';
+        }
+
+        const accentColor = normalizeColorValue(getAccentColor());
+        const currentHex = normalizeColorValue(currentColor);
+
+        return currentHex === accentColor ? 'accent' : currentHex;
     };
 
     const normalizeFontFamilyValue = (value = '') => {
@@ -161,6 +169,32 @@ export default function FormatToolbar({
         setFontFamily(familyName);
     };
 
+    const applyTextColor = (color) => {
+        const selectedColor = color === 'accent'
+            ? getAccentColor()
+            : color === 'transparent'
+                ? ''
+                : color;
+
+        editor.update(() => {
+            const selection = $getSelection();
+
+            if (!$isRangeSelection(selection)) {
+                return;
+            }
+
+            selection.getNodes().forEach((node) => {
+                if ($isTextNode(node)) {
+                    node.setStyle(setStyleProperty(node.getStyle(), 'color', selectedColor));
+                }
+            });
+
+            selection.style = setStyleProperty(selection.style || '', 'color', selectedColor);
+        });
+
+        setTextColor(color === 'transparent' ? '' : color);
+    };
+
     const updateState = React.useCallback(() => {
         editor.getEditorState().read(() => {
             // Should not to pop up the floating toolbar when using IME input
@@ -175,7 +209,10 @@ export default function FormatToolbar({
             // update text format
             setIsBold(selection.hasFormat('bold'));
             setIsItalic(selection.hasFormat('italic'));
+            setIsSuperscript(selection.hasFormat('superscript'));
+            setIsSubscript(selection.hasFormat('subscript'));
             setFontFamily(resolveFontFamilyKey(selection.style));
+            setTextColor(getTextColorValue(selection.style));
 
             const anchorNode = getSelectedNode(selection);
             const element = anchorNode.getKey() === 'root'
@@ -252,6 +289,10 @@ export default function FormatToolbar({
         });
     };
 
+    const toggleTextFormat = (format) => {
+        editor.dispatchCommand(FORMAT_TEXT_COMMAND, format);
+    };
+
     return (
         <ToolbarMenu>
             <li className="m-0 flex p-0">
@@ -259,10 +300,57 @@ export default function FormatToolbar({
                     <Dropdown
                         dataTestId="font-family"
                         menu={fontFamilies}
+                        placeholder="font"
                         value={fontFamily}
                         onChange={applyFontFamily}
                     />
                 </div>
+            </li>
+            <li className="relative m-0 flex p-0">
+                <button
+                    aria-label="Text color"
+                    className={`my-1 flex h-8 w-9 cursor-pointer items-center justify-center rounded-md transition hover:bg-grey-200/80 dark:bg-grey-950 dark:hover:bg-grey-900 ${textColor ? 'bg-grey-200/80' : 'bg-white'}`}
+                    data-kg-active={!!textColor}
+                    data-testid="text-color"
+                    type="button"
+                    onClick={(event) => {
+                        event.stopPropagation();
+                    }}
+                    onMouseDown={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        onTextColorToggle?.();
+                    }}
+                >
+                    <TextColorIcon className="size-4 overflow-visible stroke-[2.5] text-black dark:text-white" />
+                </button>
+                {isTextColorPanelOpen && (
+                    <div
+                        className="absolute left-0 top-full z-50 mt-2 w-[18rem] rounded-lg bg-white p-3 shadow-lg dark:bg-grey-950"
+                        onClick={event => event.stopPropagation()}
+                        onMouseDown={event => event.stopPropagation()}
+                    >
+                        <ColorPickerSetting
+                            dataTestId="text-color"
+                            eyedropper={true}
+                            hasTransparentOption={true}
+                            isExpanded={isTextColorPanelOpen}
+                            label="Text color"
+                            swatches={getColorPickerSwatches({includeAccent: false, includeTransparent: false})}
+                            value={textColor}
+                            onPickerChange={applyTextColor}
+                            onSwatchChange={(color) => {
+                                applyTextColor(color);
+                                onTextColorClose?.();
+                            }}
+                            onTogglePicker={(isExpanded) => {
+                                if (!isExpanded) {
+                                    onTextColorClose?.();
+                                }
+                            }}
+                        />
+                    </div>
+                )}
             </li>
             <ToolbarMenuItem
                 data-kg-toolbar-button="bold"
@@ -280,6 +368,20 @@ export default function FormatToolbar({
                 label="Emphasize"
                 shortcutKeys={[ctrlOrCmdSymbol(), 'I']}
                 onClick={() => editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic')}
+            />
+            <ToolbarMenuItem
+                data-kg-toolbar-button="superscript"
+                icon="superscript"
+                isActive={isSuperscript}
+                label="Superscript"
+                onClick={() => toggleTextFormat('superscript')}
+            />
+            <ToolbarMenuItem
+                data-kg-toolbar-button="subscript"
+                icon="subscript"
+                isActive={isSubscript}
+                label="Subscript"
+                onClick={() => toggleTextFormat('subscript')}
             />
             <ToolbarMenuItem
                 data-kg-toolbar-button="h2"

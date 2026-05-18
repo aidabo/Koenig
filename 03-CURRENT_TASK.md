@@ -1,11 +1,42 @@
 # Current task
 
-- [in_progress] Add a hover-only table column resize handle so users can discover column boundaries before drag support is added.
+- [done] Add superscript and subscript controls to the floating text toolbar, then make the font-family dropdown show a "font" placeholder.
   - working folder: `packages/koenig-lexical`
-  - scope: show a Word-like column boundary hover indicator only; do not wire drag resizing yet
-  - targets: `packages/koenig-lexical/src/styles/components/koenig-lexical.css`, a new table hover plugin/helper, and a small regression test for the hover-visibility math
-  - expected support: when the pointer approaches a cell boundary, Koenig shows a resize handle without changing selection, table layout, or existing icon actions
-  - verified: helper unit tests passed, `@tryghost/koenig-lexical` lint passed with existing demo warnings only, and `@tryghost/koenig-lexical` build passed; browser visual confirmation still pending
+  - order: first add superscript/subscript text formatting controls, then update the font-family dropdown placeholder text
+  - scope: keep the existing toolbar layout and formatting pipeline intact; only extend the visible toolbar actions and the font-family control label
+  - expected support: users can format inline text as superscript/subscript for things like m², and the font family control shows "font" as its placeholder text
+  - completed: superscript/subscript buttons are now in the floating text toolbar
+  - completed: the font-family dropdown now shows "font" as its placeholder text when it is at the default state
+  - completed: superscript/subscript toolbar icons were normalized so they visually match the other float-toolbar icons more closely
+  - verified: lint/build and yalc publish/update were run after the changes
+
+- [done] Add common named color swatches to the existing color pickers so users can pick frequent colors directly.
+  - working folder: `packages/koenig-lexical`
+  - scope: keep the current picker behavior and just expand the preset swatch palette with named common colors
+  - expected support: background/button color pickers expose direct-click swatches like White, Black, Grey, Red, Blue, Green, Yellow, Purple, and Pink, while keeping Brand color and Transparent where applicable
+  - completed: a shared common swatch palette helper was added and the real card color pickers now reuse it
+  - verified: lint/build passed and the packages were republished to host/Ghost via the yalc publish script
+  - follow-up: if needed, the same helper can later be reused by a dedicated text-color toolbar panel
+
+- [done] Add a floating text-color panel to the floating toolbar and reuse the shared named palette for direct color selection.
+  - working folder: `packages/koenig-lexical`
+  - scope: keep inline text formatting style-based and low-risk; add a toolbar button with a compact popover panel using the existing shared swatches and the hex picker
+  - expected support: users can set inline text color directly from the floating toolbar, including common named colors and the accent color, with the ability to clear back to default
+  - completed: the shared named palette is reused in the floating text-color panel and can be selected directly from the toolbar
+  - completed: the toolbar button opens the text-color popover on mouse-down so the floating toolbar interaction does not depend on a delayed click
+  - completed: the toolbar button now stops the click event as well, so the popover does not immediately close again from the document click-away handler
+  - completed: the text-color popover open state now lives in the floating-toolbar controller so the toolbar stays mounted while the panel is open
+  - completed: the named color swatches now wrap into a two-line grid so the panel stays narrower and easier to scan
+  - completed: two additional named colors, Cyan and Teal, were added so the text-color swatch set stays visually balanced
+  - verified: lint/build passed again and the updated layout was republished to host/Ghost via the yalc publish script
+  - verified: targeted text-style unit test passed, `@tryghost/koenig-lexical` lint/build passed, and the refreshed packages were published to host/Ghost via the yalc publish script
+
+- [done] Add a Word-like table column resize handle so users can discover and drag column boundaries.
+  - working folder: `packages/koenig-lexical`
+  - scope: show a Word-like column boundary hover indicator and allow dragging the handle to resize the current column, without changing selection, table layout, or existing icon actions
+  - targets: `packages/koenig-lexical/src/styles/components/koenig-lexical.css`, `packages/koenig-lexical/src/plugins/TableResizeHoverPlugin.jsx`, `packages/koenig-lexical/src/utils/tableResizeHover.js`, and a small regression test for the hover-visibility math
+  - expected support: when the pointer approaches a cell boundary, Koenig shows a resize handle and the column can be resized by dragging it
+  - verified: helper unit tests passed, `@tryghost/koenig-lexical` lint passed with existing demo warnings only, `@tryghost/koenig-lexical` build passed, and browser interaction was confirmed during review
 
 - [done] Add low-risk table width support: keep tables block-level, normalize table width CSS, and add minimal per-column widen/narrow controls instead of float layout.
   - working folder: `packages/koenig-lexical`

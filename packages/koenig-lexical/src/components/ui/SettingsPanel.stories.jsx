@@ -7,6 +7,7 @@ import ImgRegularIcon from '../../assets/icons/kg-img-regular.svg?react';
 import ImgWideIcon from '../../assets/icons/kg-img-wide.svg?react';
 import LeftAlignIcon from '../../assets/icons/kg-align-left.svg?react';
 import {ButtonGroupSetting, ColorOptionSetting, ColorPickerSetting, DropdownSetting, InputSetting, MediaUploadSetting, MultiSelectDropdownSetting, SettingsPanel, ToggleSetting} from './SettingsPanel';
+import {getColorPickerSwatches} from './colorSwatches';
 
 const story = {
     title: 'Settings panel/Settings panel',
@@ -94,11 +95,7 @@ EmailCtaCard.args = {
 export const SignupCard = Template.bind({});
 SignupCard.args = {
     children: [
-        <ColorPickerSetting label='Background color' swatches={[
-            {title: 'Brand color', accent: true},
-            {title: 'Black', hex: '#000000'},
-            {title: 'Transparent', transparent: true}
-        ]} value='#777777' />,
+        <ColorPickerSetting label='Background color' swatches={getColorPickerSwatches()} value='#777777' />,
         <MultiSelectDropdownSetting
             availableItems={[{id: '1', name: 'Free members'}, {id: '2', name: 'Paid members'}]}
             description='These labels will be applied to members who sign up via this form.'

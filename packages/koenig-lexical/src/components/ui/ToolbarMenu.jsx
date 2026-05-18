@@ -20,8 +20,11 @@ import QuoteOneIcon from '../../assets/icons/kg-quote-1.svg?react';
 import QuoteTwoIcon from '../../assets/icons/kg-quote-2.svg?react';
 import ShrinkIcon from '../../assets/icons/kg-shrink.svg?react';
 import SnippetIcon from '../../assets/icons/kg-snippet.svg?react';
+import SubscriptIcon from '../../assets/icons/kg-subscript.svg?react';
+import SuperscriptIcon from '../../assets/icons/kg-superscript.svg?react';
 import TableColumnDeleteIcon from '../../assets/icons/kg-table-column-delete.svg?react';
 import TableRowDeleteIcon from '../../assets/icons/kg-table-row-delete.svg?react';
+import TextColorIcon from '../../assets/icons/kg-text-color.svg?react';
 import TrashIcon from '../../assets/icons/kg-trash.svg?react';
 import WandIcon from '../../assets/icons/kg-wand.svg?react';
 import {Tooltip} from './Tooltip';
@@ -48,6 +51,9 @@ export const TOOLBAR_ICONS = {
     tableDeleteRow: TableRowDeleteIcon,
     tableWidenColumn: ExpandIcon,
     tableNarrowColumn: ShrinkIcon,
+    superscript: SuperscriptIcon,
+    subscript: SubscriptIcon,
+    textColor: TextColorIcon,
     edit: EditIcon,
     wand: WandIcon,
     visibility: EyeIcon,

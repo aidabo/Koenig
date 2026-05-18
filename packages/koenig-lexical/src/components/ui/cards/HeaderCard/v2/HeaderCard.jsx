@@ -21,6 +21,7 @@ import {MediaUploader} from '../../../MediaUploader';
 import {ReadOnlyOverlay} from '../../../ReadOnlyOverlay';
 import {Tooltip} from '../../../Tooltip';
 import {getAccentColor} from '../../../../../utils/getAccentColor';
+import {getColorPickerSwatches} from '../../../colorSwatches';
 import {isEditorEmpty} from '../../../../../utils/isEditorEmpty';
 // Header Card Version 2
 export function HeaderCard({alignment,
@@ -424,9 +425,7 @@ export function HeaderCard({alignment,
                                     </button>
                                 )
                             }),
-                            {title: 'Black', hex: '#000000'},
-                            {title: 'Grey', hex: '#F0F0F0'},
-                            {title: 'Brand color', accent: true}
+                            ...getColorPickerSwatches({includeTransparent: false})
                         ].filter(Boolean)}
                         value={(showBackgroundImage && layout !== 'split') ? '' : backgroundColor}
                         onPickerChange={color => handleBackgroundColor(color, matchingTextColor(color))}
@@ -491,11 +490,7 @@ export function HeaderCard({alignment,
                                 eyedropper={layout === 'split'}
                                 isExpanded={buttonColorPickerExpanded}
                                 label='Button Color'
-                                swatches={[
-                                    {title: 'White', hex: '#ffffff'},
-                                    {title: 'Black', hex: '#000000'},
-                                    {title: 'Brand color', accent: true}
-                                ]}
+                                swatches={getColorPickerSwatches({includeTransparent: false})}
                                 value={buttonColor}
                                 onPickerChange={color => handleButtonColor(color, matchingTextColor(color))}
                                 onSwatchChange={(color) => {

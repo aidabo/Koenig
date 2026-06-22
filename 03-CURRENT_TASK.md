@@ -53,6 +53,12 @@
   - scope: keep the current desktop table styling as-is; do not reintroduce mobile overrides until there is a confirmed scroll container and overflow chain that actually works in the real editor layout
   - current status: previous mobile overrides for table width/overflow were removed because they had no visible effect in this layout
 
+- [todo] Add table-aware clipboard import/export so pasted TSV/CSV data can insert or fill tables and copied table selections can leave the editor as TSV/CSV.
+  - working folder: `packages/koenig-lexical`
+  - scope: keep the existing editor/table command model, but intercept table-like clipboard data before the plain-text/markdown fallback so paste can create or fill tables and copy can emit a spreadsheet-friendly representation
+  - expected support: pasting Excel or tabular clipboard data into Koenig inserts a table and populates the cells in one step, while copying a selected table or table region emits TSV/CSV-like text that spreadsheets can consume
+  - note: no dedicated `/csv` AI chat orchestrator route was found in the host app; the low-risk path is to handle this inside Koenig's paste/copy pipeline first and only consider AI-assisted preprocessing later if needed
+
 - [done] Polish the table floating toolbar so its icons match the action direction and text selection inside a table cell shows the normal formatting toolbar.
   - working folder: `packages/koenig-lexical`
   - scope: keep existing table insert/delete actions intact, but make the icons more semantically aligned and let normal text styling controls appear when a user selects text within a cell

@@ -25,5 +25,5 @@ publish_package "$ROOT_DIR/packages/kg-default-nodes"
 publish_package "$ROOT_DIR/packages/kg-html-to-lexical"
 publish_package "$ROOT_DIR/packages/kg-lexical-html-renderer"
 
-update_consumer "$LEGACY_DIR/01-jibunsee-react/apps/host"
+update_consumer "$LEGACY_DIR/01-ghost-front/apps/host"
 update_consumer "$LEGACY_DIR/00-Ghost-5.116.2/ghost/core"

@@ -156,7 +156,7 @@ export function SliderCard({
                 <form onChange={onFileChange}>
                     <input
                         ref={fileInputRef}
-                        accept="image/*,video/*,audio/*"
+                        accept="image/*"
                         hidden={true}
                         multiple={true}
                         name="slider-media-input"

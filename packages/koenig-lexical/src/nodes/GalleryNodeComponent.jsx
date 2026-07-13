@@ -30,6 +30,7 @@ export function GalleryNodeComponent({nodeKey, captionEditor, captionEditorIniti
     const galleryReorder = useGalleryReorder({images, updateImages: reorderImages, isSelected});
     const imageUploader = fileUploader.useFileUpload('image');
     const imageFilesDropper = useFileDragAndDrop({handleDrop: handleImageFilesDrop});
+    const hasGalleryPicker = typeof cardConfig?.galleryMediaPicker === 'function';
 
     function reorderImages(newImages) {
         recalculateImageRows(newImages);
@@ -124,9 +125,36 @@ export function GalleryNodeComponent({nodeKey, captionEditor, captionEditorIniti
         await handleImageUploads(files);
     }
 
-    function handleToolbarAdd(event) {
+    const handleAddImages = (event) => {
         event.preventDefault();
+        event.stopPropagation();
         fileInputRef.current.click();
+    };
+
+    async function handleGalleryPicker(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        try {
+            const selection = await cardConfig.galleryMediaPicker({selectedImages: images});
+            const pickedImages = Array.isArray(selection?.images) ? selection.images : [];
+            const allowedImages = MAX_IMAGES - images.length;
+
+            if (pickedImages.length > allowedImages) {
+                setErrorMessage('Galleries are limited to 9 images');
+            }
+
+            const newImages = [...images, ...pickedImages.slice(0, allowedImages)];
+            if (newImages.length === images.length) {
+                return;
+            }
+
+            recalculateImageRows(newImages);
+            setImages(newImages);
+            setNodeImages(newImages);
+        } catch (error) {
+            setErrorMessage(error?.message || 'Failed to add gallery images');
+        }
     }
 
     const clearErrorMessage = () => {
@@ -136,8 +164,7 @@ export function GalleryNodeComponent({nodeKey, captionEditor, captionEditorIniti
     const hideToolbar =
         !isSelected ||
         imageFilesDropper.isDraggedOver ||
-        galleryReorder.isDraggedOver ||
-        images.length <= 0;
+        galleryReorder.isDraggedOver;
 
     return (
         <>
@@ -169,7 +196,10 @@ export function GalleryNodeComponent({nodeKey, captionEditor, captionEditorIniti
                 isVisible={!hideToolbar}
             >
                 <ToolbarMenu>
-                    <ToolbarMenuItem dataTestId="add-gallery-image" icon="add" isActive={false} label="Add images" onClick={handleToolbarAdd} />
+                    <ToolbarMenuItem dataTestId="add-gallery-image" icon="add" isActive={false} label="Add images" onClick={handleAddImages} />
+                    {hasGalleryPicker ? (
+                        <ToolbarMenuItem dataTestId="pick-gallery-image" icon="gallery" isActive={false} label="Pick from gallery" onClick={handleGalleryPicker} />
+                    ) : null}
                     <ToolbarMenuSeparator hide={!cardConfig.createSnippet} />
                     <ToolbarMenuItem
                         dataTestId="create-snippet"

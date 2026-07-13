@@ -50,6 +50,7 @@ describe('buildCardMenu', function () {
             ['markdown', {kgMenu: {label: 'Markdown', desc: 'Markdown card', Icon, insertCommand: 'insert_markdown', priority: 3}}],
             ['image', {kgMenu: {label: 'Image', desc: 'Image card', Icon, insertCommand: 'insert_image', priority: 1}}],
             ['gallery', {kgMenu: {label: 'Gallery', desc: 'Gallery card', Icon, insertCommand: 'insert_gallery', priority: 4}}],
+            ['slider', {kgMenu: {label: 'Slider', desc: 'Slider card', Icon, insertCommand: 'insert_slider', priority: 4.2}}],
             ['video', {kgMenu: {label: 'Video', desc: 'Video card', Icon, insertCommand: 'insert_video', priority: 2}}],
             ['divider', {kgMenu: {label: 'Divider', desc: 'Divider card', Icon, insertCommand: 'insert_divider', priority: 7}}],
             ['html', {kgMenu: {label: 'HTML', desc: 'HTML card', Icon, insertCommand: 'insert_html', priority: 6}}]
@@ -62,6 +63,7 @@ describe('buildCardMenu', function () {
             'Video',
             'Markdown',
             'Gallery',
+            'Slider',
             'File',
             'HTML',
             'Divider'

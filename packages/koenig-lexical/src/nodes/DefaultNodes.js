@@ -37,6 +37,7 @@ import {MarkdownNode} from './MarkdownNode';
 import {PaywallNode} from './PaywallNode';
 import {ProductNode} from './ProductNode';
 import {SignupNode} from './SignupNode';
+import {SliderNode} from './SliderNode';
 import {TableCellNode, TableRowNode} from '@lexical/table';
 import {TableNode} from './TableNode';
 import {ToggleNode} from './ToggleNode';
@@ -78,6 +79,7 @@ const DEFAULT_NODES = [
     EmailCtaNode,
     EmbedNode,
     GalleryNode,
+    SliderNode,
     SignupNode,
     CollectionNode,
     MultiColumnNode,

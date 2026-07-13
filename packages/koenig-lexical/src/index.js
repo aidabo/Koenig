@@ -31,6 +31,7 @@ import PlusCardMenuPlugin from './plugins/PlusCardMenuPlugin';
 import RestrictContentPlugin from './plugins/RestrictContentPlugin';
 import SignupPlugin from './plugins/SignupPlugin';
 import SlashCardMenuPlugin from './plugins/SlashCardMenuPlugin';
+import SliderPlugin from './plugins/SliderPlugin';
 import TKCountPlugin from './plugins/TKCountPlugin';
 import TogglePlugin from './plugins/TogglePlugin';
 import VideoPlugin from './plugins/VideoPlugin';
@@ -45,6 +46,7 @@ import BASIC_NODES from './nodes/BasicNodes';
 import DEFAULT_NODES from './nodes/DefaultNodes';
 import MINIMAL_NODES from './nodes/MinimalNodes';
 import {INSERT_MULTI_COLUMN_COMMAND} from './nodes/MultiColumnNode';
+import {INSERT_SLIDER_COMMAND, SliderNode} from './nodes/SliderNode';
 import {INSERT_VIDEO_COMMAND} from './nodes/VideoNode';
 
 /* Transformers */
@@ -96,6 +98,7 @@ export {
     SlashCardMenuPlugin,
     TKCountPlugin,
     TogglePlugin,
+    SliderPlugin,
     TableNode,
     VideoPlugin,
     WordCountPlugin,
@@ -106,7 +109,9 @@ export {
     BASIC_NODES,
     MINIMAL_NODES,
     INSERT_VIDEO_COMMAND,
+    INSERT_SLIDER_COMMAND,
     INSERT_MULTI_COLUMN_COMMAND,
+    SliderNode,
 
     ELEMENT_TRANSFORMERS,
     HR_TRANSFORMER,

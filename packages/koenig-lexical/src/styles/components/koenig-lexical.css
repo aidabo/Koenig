@@ -8,12 +8,12 @@
 }
 
 /* Keep editor media delete controls visible when the published CSS omits Tailwind group variants. */
-.koenig-lexical [data-testid="gallery-image"].group\/image:hover > .pointer-events-none,
-.koenig-lexical [data-testid="gallery-image"].group\/image:focus-within > .pointer-events-none,
-.koenig-lexical [data-testid="slider-slide"] .kg-slider-media.group\/image:hover > .pointer-events-none,
-.koenig-lexical [data-testid="slider-slide"] .kg-slider-media.group\/image:focus-within > .pointer-events-none {
-    visibility: visible;
-    opacity: 1;
+.koenig-lexical [data-testid="gallery-image"]:hover > .pointer-events-none,
+.koenig-lexical [data-testid="gallery-image"]:focus-within > .pointer-events-none,
+.koenig-lexical [data-testid="slider-slide"] .kg-slider-media:hover > .pointer-events-none,
+.koenig-lexical [data-testid="slider-slide"] .kg-slider-media:focus-within > .pointer-events-none {
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* everything is nested here to keep it scoped to our container */

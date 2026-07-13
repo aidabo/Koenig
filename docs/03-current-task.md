@@ -1,5 +1,34 @@
 # Current task
 
+- [done] Add a responsive Slider card with media normalization, editor insertion UI, and gallery-adapter support.
+  - working folder: `packages/koenig-lexical`, `packages/kg-default-nodes`
+  - scope: keep the existing Gallery card flow untouched while adding a separate Slider card, node, plugin, and shared media normalization helpers
+  - expected support: the editor can insert a slider card, add media from local files or a gallery adapter, and preserve caption/slide data for image, video, and audio items
+  - completed: Slider node, plugin, card UI, and shared slider-media helpers were added; default node registries now include the slider node on both the editor and read-side paths
+  - completed: local uploads now cover image, video, and audio slides; the host adapter can add normalized slides through `cardConfig.sliderMediaPicker`
+  - verified: targeted eslint, vitest, and slider-node mocha runs passed for the new slider files plus the existing `buildCardMenu` regression test
+  - [done] Wire the host editor gallery dialog into `cardConfig.sliderMediaPicker`.
+    - working folder: `08-publish/apps/host`, `packages/koenig-lexical`
+    - scope: reuse the existing editor gallery dialog and keep the slider as a separate card; do not add a second picker UI
+    - reference samples: `packages/koenig-lexical/src/plugins/VideoPlugin.jsx` for insert-command wiring, and `08-publish/apps/host/src/components/demo/EditorComponent.tsx` for the gallery dialog state and open/close flow
+    - expected support: clicking the slider card's gallery button opens the existing host gallery dialog and returns selected media into the slider as normalized slides
+    - completed: host `EditorComponent` now opens the existing gallery dialog for slider cards, resolves selected image/video/audio assets into normalized slider slide payloads, and leaves the normal editor gallery video insert command path unchanged
+    - completed: host `DemoApp` now forwards the slider media picker callback into Koenig `cardConfig.sliderMediaPicker`
+    - status: completed
+  - [done] Keep slider insertion and read-side support stable while the host adapter is added.
+    - working folder: `packages/koenig-lexical`, `packages/kg-default-nodes`
+    - scope: preserve local image/video/audio upload, caption editing, and round-trip rendering while adding the gallery callback path
+    - expected support: the slider still inserts from the editor command path, still accepts local uploads, and still round-trips through the read-side parser/renderer after the adapter lands
+    - verified: targeted Koenig slider unit tests and kg-default-nodes slider mocha tests still pass after the host adapter bridge was added
+    - status: completed
+  - [done] Add regression coverage for the host gallery adapter path.
+    - working folder: `packages/koenig-lexical`, `08-publish/apps/host`
+    - scope: add tests for adapter-present and adapter-absent behavior, plus a happy-path gallery selection flow that mirrors the video insert pattern
+    - expected support: tests confirm the slider gallery button is hidden when the adapter is absent and inserts selected slides when it is present
+    - completed: `SliderNodeComponent.test.jsx` covers adapter-absent behavior and adapter-present gallery selection adding normalized slides
+    - verified: `yarn test:unit test/unit/slider-media.test.js test/unit/SliderNodeComponent.test.jsx test/unit/buildCardMenu.test.js`
+    - status: completed
+
 - [done] Add superscript and subscript controls to the floating text toolbar, then make the font-family dropdown show a "font" placeholder.
   - working folder: `packages/koenig-lexical`
   - order: first add superscript/subscript text formatting controls, then update the font-family dropdown placeholder text

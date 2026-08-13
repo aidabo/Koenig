@@ -3,12 +3,23 @@ export default function extractVideoMetadata(file) {
     return new Promise((resolve, reject) => {
         const mimeType = file.type;
         let duration, width, height;
+        const objectUrl = URL.createObjectURL(file);
 
         const video = document.createElement('video');
         video.muted = true;
         video.playsInline = true;
 
-        video.onerror = reject;
+        const cleanup = () => {
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+        };
+
+        video.onerror = (error) => {
+            cleanup();
+            reject(error);
+        };
 
         video.onloadedmetadata = function () {
             duration = video.duration;
@@ -29,9 +40,8 @@ export default function extractVideoMetadata(file) {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, width, height);
 
-            window.URL.revokeObjectURL(video.src);
-
             ctx.canvas.toBlob((thumbnailBlob) => {
+                cleanup();
                 resolve({
                     duration,
                     width,
@@ -42,7 +52,7 @@ export default function extractVideoMetadata(file) {
             }, 'image/jpeg', 0.75);
         };
 
-        video.src = URL.createObjectURL(file);
+        video.src = objectUrl;
         // required for iPhone Safari to load the video contents for the thumbnail
         video.load();
     });

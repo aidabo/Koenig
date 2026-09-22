@@ -3,7 +3,7 @@ import React from 'react';
 import TrashCardIcon from '../../assets/icons/kg-trash.svg?react';
 import trackEvent from '../../utils/analytics';
 
-export const CardMenuSection = ({label, children, ...props}) => {
+export const CardMenuSection = ({label, displayLabel, children, ...props}) => {
     let helpLink = '';
     if (label === 'Primary') {
         helpLink = 'https://ghost.org/help/cards/';
@@ -17,7 +17,7 @@ export const CardMenuSection = ({label, children, ...props}) => {
                 className="flex items-center justify-between px-4 pb-2 pt-3 uppercase"
                 data-card-menu-section="label"
                 style={{minWidth: 'calc(100% - 3.2rem)'}}
-            >{label}
+            >{displayLabel || label}
                 {helpLink && <a href={helpLink} rel="noreferrer" target='_blank'>
                     <ExternalLinkIcon className="-m-1 size-6 cursor-pointer p-1 transition-all hover:text-green-600" />
                 </a>}
@@ -29,7 +29,7 @@ export const CardMenuSection = ({label, children, ...props}) => {
     );
 };
 
-export const CardMenuItem = ({label, shortcut, desc, isSelected, scrollToItem, onClick, Icon, ...props}) => {
+export const CardMenuItem = ({label, displayLabel, shortcut, desc, isSelected, scrollToItem, onClick, Icon, ...props}) => {
     const buttonRef = React.useRef(null);
 
     React.useEffect(() => {
@@ -62,7 +62,7 @@ export const CardMenuItem = ({label, shortcut, desc, isSelected, scrollToItem, o
                     <Icon className="size-[1.8rem]" />
                 </div>
                 <div className="flex w-full justify-between">
-                    <div className="m-0 truncate text-[1.35rem] font-medium leading-snug tracking-[.02rem] text-grey-900 dark:text-grey-200">{label}</div>
+                    <div className="m-0 truncate text-[1.35rem] font-medium leading-snug tracking-[.02rem] text-grey-900 dark:text-grey-200">{displayLabel || label}</div>
                     <div className="invisible m-0 truncate text-[1.35rem] font-medium leading-snug tracking-[.02rem] text-grey-500 group-hover:visible dark:text-grey-200">{shortcut}</div>
                 </div>
             </button>
@@ -117,7 +117,11 @@ export const CardSnippetItem = ({label, isSelected, scrollToItem, Icon, onRemove
     );
 };
 
-export const CardMenu = ({menu = new Map(), insert = () => {}, selectedItemIndex, scrollToSelectedItem, closeMenu}) => {
+export const CardMenu = ({menu = new Map(), insert = () => {}, selectedItemIndex, scrollToSelectedItem, closeMenu, t}) => {
+    // Optional translator supplied by the host (config.t): translate the visible
+    // card/section names to the site locale for display only. The original
+    // English `label` is kept for matching, data attributes and analytics.
+    const translate = typeof t === 'function' ? t : null;
     // build up the children arrays from the passed in menu Map
     const CardMenuSections = [];
 
@@ -141,6 +145,7 @@ export const CardMenu = ({menu = new Map(), insert = () => {}, selectedItemIndex
                         key={itemIndex}
                         data-kg-cardmenu-idx={itemIndex}
                         desc={item.desc}
+                        displayLabel={translate ? translate(item.label) : undefined}
                         Icon={item.Icon}
                         isSelected={isSelected}
                         label={item.label}
@@ -168,7 +173,7 @@ export const CardMenu = ({menu = new Map(), insert = () => {}, selectedItemIndex
             itemIndex = itemIndex + 1;
         });
 
-        CardMenuSections.push(<CardMenuSection key={sectionLabel} label={sectionLabel}>{CardMenuItems}</CardMenuSection>);
+        CardMenuSections.push(<CardMenuSection key={sectionLabel} displayLabel={translate ? translate(sectionLabel) : undefined} label={sectionLabel}>{CardMenuItems}</CardMenuSection>);
     }
 
     return (

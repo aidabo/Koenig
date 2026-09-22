@@ -363,6 +363,7 @@ function useSlashCardMenu(editor) {
                         menu={cardMenu.menu}
                         scrollToSelectedItem={scrollToSelectedItem}
                         selectedItemIndex={selectedItemIndex}
+                        t={cardConfig?.t}
                     />
                 </SlashMenu>
             </div>

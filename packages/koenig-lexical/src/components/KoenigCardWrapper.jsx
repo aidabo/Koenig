@@ -3,6 +3,7 @@ import KoenigComposerContext from '../context/KoenigComposerContext';
 import React from 'react';
 import {$getNodeByKey, CLICK_COMMAND, COMMAND_PRIORITY_LOW} from 'lexical';
 import {CardWrapper} from './ui/CardWrapper';
+import {ToolbarMenu, ToolbarMenuItem} from './ui/ToolbarMenu';
 import {DELETE_CARD_COMMAND, DESELECT_CARD_COMMAND, EDIT_CARD_COMMAND, SELECT_CARD_COMMAND} from '../plugins/KoenigBehaviourPlugin';
 import {mergeRegister} from '@lexical/utils';
 import {useKoenigSelectedCardContext} from '../context/KoenigSelectedCardContext';
@@ -209,31 +210,28 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 
             >
                 {isSelected && isTouchDevice && (
-                    // Touch-only floating "delete" tool pinned to the card's
-                    // top-right. Touch devices have no Delete/Backspace key and a
-                    // selected card shows no caret (so no keyboard). A blank media
-                    // card also opens its file picker when tapped, so this gives a
-                    // clear way to remove it. Gated in JS (isTouchDevice) rather
-                    // than a CSS pointer:coarse variant, which kept it hidden.
-                    <div className="pointer-events-none absolute right-2 top-2 z-40 flex justify-end">
-                        <button
-                            aria-label="Delete card"
-                            className="pointer-events-auto flex items-center gap-1.5 rounded-lg bg-black/80 px-3 py-2 text-white shadow-lg"
-                            data-kg-allow-clickthrough="false"
-                            data-testid="mobile-delete-card-button"
-                            type="button"
-                            onClick={handleDeleteCard}
-                            onMouseDown={event => event.stopPropagation()}
-                            onPointerDown={event => event.stopPropagation()}
-                            onTouchStart={event => event.stopPropagation()}
-                        >
-                            <svg aria-hidden="true" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-7 0v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <span className="text-[1.3rem] font-medium leading-none">
-                                {(cardConfig?.t && cardConfig.t('Delete')) || 'Delete'}
-                            </span>
-                        </button>
+                    // Touch-only delete tool pinned to the card's top-right, using
+                    // koenig's native ToolbarMenu/ToolbarMenuItem so it matches every
+                    // other card toolbar. Touch devices have no Delete/Backspace key
+                    // and a selected card shows no caret (so no keyboard); a blank
+                    // media card also opens its file picker when tapped, so this
+                    // gives a clear way to remove it. Gated in JS (isTouchDevice)
+                    // rather than a CSS pointer:coarse variant, which kept it hidden.
+                    <div
+                        className="absolute right-2 top-2 z-40 flex justify-end"
+                        data-kg-allow-clickthrough="false"
+                        onMouseDown={event => event.stopPropagation()}
+                        onPointerDown={event => event.stopPropagation()}
+                        onTouchStart={event => event.stopPropagation()}
+                    >
+                        <ToolbarMenu>
+                            <ToolbarMenuItem
+                                dataTestId="mobile-delete-card-button"
+                                icon="remove"
+                                label={(cardConfig?.t && cardConfig.t('Delete')) || 'Delete'}
+                                onClick={handleDeleteCard}
+                            />
+                        </ToolbarMenu>
                     </div>
                 )}
                 {children}

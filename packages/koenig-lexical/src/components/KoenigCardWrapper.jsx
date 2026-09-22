@@ -195,21 +195,32 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 
             >
                 {isSelected && (
-                    <button
-                        aria-label="Delete card"
-                        className="absolute right-2 top-2 z-30 hidden size-9 items-center justify-center rounded-full bg-black/60 text-white shadow-md [@media(pointer:coarse)]:flex"
-                        data-kg-allow-clickthrough="false"
-                        data-testid="mobile-delete-card-button"
-                        type="button"
-                        onClick={handleDeleteCard}
-                        onMouseDown={event => event.stopPropagation()}
-                        onPointerDown={event => event.stopPropagation()}
-                        onTouchStart={event => event.stopPropagation()}
-                    >
-                        <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-7 0v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
+                    // Touch-only floating "delete" tool above the card. Touch
+                    // devices have no Delete/Backspace key and a selected card
+                    // shows no caret (so no keyboard). A blank media card also
+                    // opens its file picker when tapped, so this sits ABOVE the
+                    // card, out of the tap area, giving a clear way to remove it.
+                    // Hidden on mouse (fine-pointer) devices, which keep the key.
+                    <div className="pointer-events-none absolute -top-11 right-0 z-40 hidden justify-end [@media(pointer:coarse)]:flex">
+                        <button
+                            aria-label="Delete card"
+                            className="pointer-events-auto flex items-center gap-1.5 rounded-lg bg-black/80 px-3 py-2 text-white shadow-lg"
+                            data-kg-allow-clickthrough="false"
+                            data-testid="mobile-delete-card-button"
+                            type="button"
+                            onClick={handleDeleteCard}
+                            onMouseDown={event => event.stopPropagation()}
+                            onPointerDown={event => event.stopPropagation()}
+                            onTouchStart={event => event.stopPropagation()}
+                        >
+                            <svg aria-hidden="true" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-7 0v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span className="text-[1.3rem] font-medium leading-none">
+                                {(cardConfig?.t && cardConfig.t('Delete')) || 'Delete'}
+                            </span>
+                        </button>
+                    </div>
                 )}
                 {children}
             </CardWrapper>

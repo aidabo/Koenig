@@ -201,7 +201,7 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                     // opens its file picker when tapped, so this sits ABOVE the
                     // card, out of the tap area, giving a clear way to remove it.
                     // Hidden on mouse (fine-pointer) devices, which keep the key.
-                    <div className="pointer-events-none absolute -top-11 right-0 z-40 hidden justify-end [@media(pointer:coarse)]:flex">
+                    <div className="pointer-events-none absolute right-2 top-2 z-40 hidden justify-end [@media(pointer:coarse)]:flex">
                         <button
                             aria-label="Delete card"
                             className="pointer-events-auto flex items-center gap-1.5 rounded-lg bg-black/80 px-3 py-2 text-white shadow-lg"

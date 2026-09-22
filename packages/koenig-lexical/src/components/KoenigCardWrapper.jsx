@@ -23,6 +23,20 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
     const isSelected = selectedCardKey === nodeKey;
     const isEditing = isSelected && isEditingCard;
 
+    // Detect touch devices in JS rather than via a CSS `[@media(pointer:coarse)]`
+    // arbitrary variant: that variant is scoped under `.koenig-lexical`, is subject
+    // to Tailwind purge, and competes with `hidden` in the cascade — three ways it
+    // can silently fail to reveal the button. A plain JS check is unambiguous.
+    const [isTouchDevice, setIsTouchDevice] = React.useState(false);
+    React.useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        const coarse = window.matchMedia?.('(pointer: coarse)')?.matches;
+        const touch = 'ontouchstart' in window || (window.navigator?.maxTouchPoints ?? 0) > 0;
+        setIsTouchDevice(Boolean(coarse || touch));
+    }, []);
+
     // Touch devices have no Delete/Backspace key, and a selected card shows no
     // text caret so the soft keyboard never opens — leaving no way to remove a
     // selected card (e.g. an empty image upload placeholder). Show an explicit
@@ -194,14 +208,14 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 onIndicatorClick={toggleEditMode}
                 
             >
-                {isSelected && (
-                    // Touch-only floating "delete" tool above the card. Touch
-                    // devices have no Delete/Backspace key and a selected card
-                    // shows no caret (so no keyboard). A blank media card also
-                    // opens its file picker when tapped, so this sits ABOVE the
-                    // card, out of the tap area, giving a clear way to remove it.
-                    // Hidden on mouse (fine-pointer) devices, which keep the key.
-                    <div className="pointer-events-none absolute right-2 top-2 z-40 hidden justify-end [@media(pointer:coarse)]:flex">
+                {isSelected && isTouchDevice && (
+                    // Touch-only floating "delete" tool pinned to the card's
+                    // top-right. Touch devices have no Delete/Backspace key and a
+                    // selected card shows no caret (so no keyboard). A blank media
+                    // card also opens its file picker when tapped, so this gives a
+                    // clear way to remove it. Gated in JS (isTouchDevice) rather
+                    // than a CSS pointer:coarse variant, which kept it hidden.
+                    <div className="pointer-events-none absolute right-2 top-2 z-40 flex justify-end">
                         <button
                             aria-label="Delete card"
                             className="pointer-events-auto flex items-center gap-1.5 rounded-lg bg-black/80 px-3 py-2 text-white shadow-lg"

@@ -3,7 +3,7 @@ import KoenigComposerContext from '../context/KoenigComposerContext';
 import React from 'react';
 import {$getNodeByKey, CLICK_COMMAND, COMMAND_PRIORITY_LOW} from 'lexical';
 import {CardWrapper} from './ui/CardWrapper';
-import {DESELECT_CARD_COMMAND, EDIT_CARD_COMMAND, SELECT_CARD_COMMAND} from '../plugins/KoenigBehaviourPlugin';
+import {DELETE_CARD_COMMAND, DESELECT_CARD_COMMAND, EDIT_CARD_COMMAND, SELECT_CARD_COMMAND} from '../plugins/KoenigBehaviourPlugin';
 import {mergeRegister} from '@lexical/utils';
 import {useKoenigSelectedCardContext} from '../context/KoenigSelectedCardContext';
 import {useLexicalComposerContext} from '@lexical/react/LexicalComposerContext';
@@ -22,6 +22,18 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
 
     const isSelected = selectedCardKey === nodeKey;
     const isEditing = isSelected && isEditingCard;
+
+    // Touch devices have no Delete/Backspace key, and a selected card shows no
+    // text caret so the soft keyboard never opens — leaving no way to remove a
+    // selected card (e.g. an empty image upload placeholder). Show an explicit
+    // delete button on touch pointers when the card is selected; it fires the
+    // same DELETE_CARD_COMMAND the Backspace/Delete keys use. Hidden on
+    // fine-pointer (mouse) devices, which keep the keyboard shortcut.
+    const handleDeleteCard = React.useCallback((event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        editor.dispatchCommand(DELETE_CARD_COMMAND, {cardKey: nodeKey, direction: 'backward'});
+    }, [editor, nodeKey]);
 
     const toggleEditMode = React.useCallback((event) => {
         event.preventDefault();
@@ -182,6 +194,23 @@ const KoenigCardWrapper = ({nodeKey, width, wrapperStyle, IndicatorIcon, childre
                 onIndicatorClick={toggleEditMode}
                 
             >
+                {isSelected && (
+                    <button
+                        aria-label="Delete card"
+                        className="absolute right-2 top-2 z-30 hidden size-9 items-center justify-center rounded-full bg-black/60 text-white shadow-md [@media(pointer:coarse)]:flex"
+                        data-kg-allow-clickthrough="false"
+                        data-testid="mobile-delete-card-button"
+                        type="button"
+                        onClick={handleDeleteCard}
+                        onMouseDown={event => event.stopPropagation()}
+                        onPointerDown={event => event.stopPropagation()}
+                        onTouchStart={event => event.stopPropagation()}
+                    >
+                        <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-7 0v12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V7" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </button>
+                )}
                 {children}
             </CardWrapper>
         </CardContext.Provider>
